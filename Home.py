@@ -8,10 +8,7 @@ from google.genai.errors import APIError
 # ==========================================
 # [보안 및 설정] st.secrets를 통해 안전하게 키 가져오기
 # ==========================================
-# 소스 코드에는 키가 노출되지 않으며, 환경 설정에 등록한 값을 동적으로 가져옵니다.
 FIXED_GOOGLE_API_KEY = st.secrets["GEMINI_API_KEY"]
-
-# RAG용 고정 PDF 파일 이름 (코드와 같은 폴더에 위치해야 함)
 FIXED_PDF_FILENAME = "abc.pdf"  
 
 
@@ -48,13 +45,10 @@ def upload_fixed_file_once(api_key: str, file_path: str):
     target_display_name = os.path.basename(file_path)
     
     try:
-        # 1. 구글 서버에 이미 업로드된 파일 목록 조회
         for file in client.files.list():
-            # 파일명이 같고 상태가 ACTIVE(사용 가능)이면 해당 파일 객체를 그대로 재사용 [2]
             if file.display_name == target_display_name and file.state.name == "ACTIVE":
                 return file
         
-        # 2. 중복 파일이 없는 경우에만 새로 업로드 실행 (20GB 저장소 고갈 방지)
         google_file = client.files.upload(file=file_path)
         return google_file
     except Exception as e:
@@ -68,7 +62,28 @@ def upload_fixed_file_once(api_key: str, file_path: str):
 st.title("💬 전북 Chatbot")
 st.caption("🚀 고정 지침 문서를 기반으로 답변하는 안내 챗봇입니다.")
 
-# 중복 방지 로직이 적용된 구글 파일 객체 가져오기
+# ------------------------------------------
+# 🔥 [임시 추가] 스트림릿 웹에서 구글 서버 파일 일괄 청소하는 버튼
+# ------------------------------------------
+with st.sidebar: # 관리 편의를 위해 사이드바에 배치합니다.
+    st.header("⚙️ 관리자 전용 메뉴")
+    if st.button("🗑️ 구글 API 저장소 중복 파일 일괄 삭제"):
+        with st.spinner("구글 서버 청소 중... 잠시만 기다려주세요."):
+            try:
+                client = genai.Client(api_key=FIXED_GOOGLE_API_KEY)
+                deleted_count = 0
+                for file in client.files.list():
+                    client.files.delete(name=file.name)
+                    deleted_count += 1
+                
+                # 중복 업로드 방지 캐시 초기화
+                st.cache_resource.clear() 
+                st.success(f"✨ 청소 완료! 총 {deleted_count}개의 파일이 구글 서버에서 영구 삭제되었습니다.")
+                st.rerun() # 화면 새로고침
+            except Exception as e:
+                st.error(f"삭제 실패: {e}")
+# ------------------------------------------
+
 google_file = upload_fixed_file_once(FIXED_GOOGLE_API_KEY, FIXED_PDF_FILENAME)
 
 if not google_file:
@@ -86,17 +101,14 @@ for msg in st.session_state.messages:
 # ==========================================
 if prompt := st.chat_input("질문할 내용을 입력하세요..."):
     
-    # 캐싱된 클라이언트 호출
     client = get_gemini_client(FIXED_GOOGLE_API_KEY)
-
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
 
     contents_payload = []
     
-    # google-genai 1.0+ 규격에 맞춘 payload 구성 [1, 2]
     if google_file:
-        contents_payload.append(google_file) # 파일 객체를 직접 추가 [1]
+        contents_payload.append(google_file)
         instruction = f"반드시 첨부된 문서를 기반으로만 답변해 주세요. 사용자 질문: {prompt}"
         contents_payload.append(instruction)
     else:
