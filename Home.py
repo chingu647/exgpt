@@ -3,30 +3,41 @@ import streamlit as st
 import pandas as pd
 import numpy as np 
 
-# 작동하는 기존 코드 구조를 유지하면서 좌측 버튼만 강제로 살리는 CSS
-additional_style = """
+# 좌측 화살표(슬라이드 토글)는 남기고 삼선 메뉴와 배포 버튼만 확실히 지우는 CSS
+final_style = """
 <style>
-/* [기존 코드 그대로 유지] 상단 헤더 전체 숨기기 */
-header {
+/* 1. 우측 삼선 메뉴(햄버거 버튼) 완전히 제거 */
+[data-testid="stActionButton"] {
+    display: none !important;
+}
+
+/* 2. 배포(Deploy) 버튼 완전히 제거 (두 가지 버전 클래스 모두 대응) */
+.stDeployButton, .stAppDeployButton {
+    display: none !important;
+}
+
+/* 3. 하단 푸터(Made with Streamlit) 제거 */
+footer {
     visibility: hidden;
 }
 
-/* [추가] 헤더 내부의 좌측 슬라이드 버튼 영역만 강제로 보이게(visible) 설정 */
-header > div:first-child {
-    visibility: visible !important;
-}
-
-/* [기존 코드 그대로 유지] 배포 버튼 완전히 제거 */
-.stDeployButton {
-    display: none !important;
-}
-.stAppDeployButton {
-    display: none !important;
+/* 4. (선택) 헤더 영역의 불필요한 배경을 투명화하여 좌측 화살표만 깔끔하게 노출 */
+header[data-testid="stHeader"] {
+    background-color: transparent !important;
 }
 </style>
 """
 
-st.markdown(additional_style, unsafe_allow_html=True)
+st.markdown(final_style, unsafe_allow_html=True)
+
+# 테스트용 사이드바 및 본문 코드
+st.sidebar.title("좌측 슬라이드바")
+st.sidebar.write("성공! 화살표가 보이며 정상 작동합니다.")
+st.title("메인 화면")
+st.write("우측 상단의 삼선 메뉴와 배포 버튼만 깔끔하게 숨겨졌습니다.")
+
+
+
 
 
 
