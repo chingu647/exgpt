@@ -4,15 +4,20 @@ import numpy as np
 import tempfile
 import os
 from google import genai
+from google.genai import types  # 상단으로 이동하여 효율성 최적화
 from google.genai.errors import APIError
 
-# -----------------------------------------------------------------------------
-# st.sidebar.title("좌측 슬라이드바")
-# st.sidebar.write("사이드바가 정상적으로 열리고 닫힙니다.")
+# ==========================================
+# [추가] 구글 API 클라이언트 캐싱 함수
+# ==========================================
+@st.cache_resource
+def get_gemini_client(api_key: str):
+    """
+    한 번 생성된 API 클라이언트를 메모리에 보존하여
+    채팅을 입력할 때마다 발생하는 객체 생성 딜레이를 완벽히 제거합니다.
+    """
+    return genai.Client(api_key=api_key)
 
-# st.title("최종 메인 화면")
-# st.write("우측 상단의 햄버거 삼선 메뉴와 배포 버튼이 완벽히 사라졌습니다.")
-# -----------------------------------------------------------------------------
 
 # ==========================================
 # 1. 사이드바 구성 (설정 및 파일 업로드)
@@ -56,8 +61,8 @@ if prompt := st.chat_input():
         st.info("시작하기 전에 왼쪽 사이드바에 Google API Key를 입력해 주세요.")
         st.stop()
         
-    # 구글 API 클라이언트 생성
-    client = genai.Client(api_key=google_api_key)
+    # [수정] 매번 생성하지 않고 캐싱된 고속 클라이언트를 즉시 불러옴
+    client = get_gemini_client(google_api_key)
 
     # 3-2. 새 문서가 감지되면 구글 File API로 업로드 처리
     if uploaded_file and st.session_state["uploaded_file_uri"] is None:
@@ -85,12 +90,10 @@ if prompt := st.chat_input():
     st.chat_message("user").write(prompt)
 
     # 3-4. Gemini 모델 생성 프롬프트 구성 (RAG 핵심)
-    # 업로드된 파일이 있다면 프롬프트 내용에 파일 객체를 바인딩하여 같이 전송합니다.
     contents_payload = []
     
     if st.session_state["uploaded_file_uri"]:
         # 파일이 주어지면 텍스트와 함께 구글 저장소 URI 객체를 조립
-        from google.genai import types
         file_part = types.Part.from_uri(
             file_uri=st.session_state["uploaded_file_uri"],
             mime_type=st.session_state["uploaded_file_mime"]
@@ -104,21 +107,23 @@ if prompt := st.chat_input():
         # 파일이 없을 경우 일반 대화 프롬프트로 작동
         contents_payload.append(prompt)
 
-    # 3-5. API 호출 및 답변 출력 (RPM 예외 처리 적용)
-    with st.spinner("답변 생성 중..."):
-        try:
-            response = client.models.generate_content(
+    # 3-5. [수정] 실시간 스트리밍 호출 및 응답 출력 처리
+    try:
+        # AI 답변 말풍선 미리 생성
+        with st.chat_message("assistant"):
+            # 대기시간을 제거하기 위해 스트리밍 API로 전환하여 호출
+            response_stream = client.models.generate_content_stream(
                 model='gemini-2.5-flash-lite',
                 contents=contents_payload,
             )
-            msg = response.text
-            
-            # AI 답변 화면 출력 및 세션 저장
-            st.session_state.messages.append({"role": "assistant", "content": msg})
-            st.chat_message("assistant").write(msg)
-            
-        except APIError as e:
-            if e.code == 429:
-                st.error("⏳ 무료 RPM(분당 요청 한도)을 초과했습니다. 약 1분 후 다시 시도해 주세요.")
-            else:
-                st.error(f"오류가 발생했습니다: {e}")
+            # 실시간으로 글자가 한 자씩 타이핑되는 연출을 적용하고 최종 텍스트 수집
+            msg = st.write_stream(chunk.text for chunk in response_stream)
+        
+        # 전체 수집 완료된 AI 답변을 대화 세션에 최종 저장
+        st.session_state.messages.append({"role": "assistant", "content": msg})
+        
+    except APIError as e:
+        if e.code == 429:
+            st.error("⏳ 무료 RPM(분당 요청 한도)을 초과했습니다. 약 1분 후 다시 시도해 주세요.")
+        else:
+            st.error(f"오류가 발생했습니다: {e}")
