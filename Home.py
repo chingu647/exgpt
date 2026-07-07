@@ -3,28 +3,31 @@ import streamlit as st
 import pandas as pd
 import numpy as np 
 
-# 좌측 사이드바 버튼은 남기고 삼선 메뉴, 배포 버튼, 푸터만 숨기기
-hide_elements_style = """
+# 작동하는 기존 코드 구조를 유지하면서 좌측 버튼만 강제로 살리는 CSS
+additional_style = """
 <style>
-/* 1. 삼선 메뉴 숨기기 */
-#MainMenu {visibility: hidden;}
+/* [기존 코드 그대로 유지] 상단 헤더 전체 숨기기 */
+header {
+    visibility: hidden;
+}
 
-/* 2. 배포(Deploy) 버튼 숨기기 (버전별 호환) */
-.stDeployButton {display: none !important;}
-.stAppDeployButton {display: none !important;}
+/* [추가] 헤더 내부의 좌측 슬라이드 버튼 영역만 강제로 보이게(visible) 설정 */
+header > div:first-child {
+    visibility: visible !important;
+}
 
-/* 3. 하단 푸터 숨기기 */
-footer {visibility: hidden;}
-
-/* 4. 헤더 자체는 남겨두되 투명하게 만들고 높이를 줄여 사이드바 버튼 위치 확보 */
-header[data-testid="stHeader"] {
-    background-color: rgba(0,0,0,0) !important;
-    background: transparent !important;
+/* [기존 코드 그대로 유지] 배포 버튼 완전히 제거 */
+.stDeployButton {
+    display: none !important;
+}
+.stAppDeployButton {
+    display: none !important;
 }
 </style>
 """
 
-st.markdown(hide_elements_style, unsafe_allow_html=True)
+st.markdown(additional_style, unsafe_allow_html=True)
+
 
 
 with st.sidebar:
