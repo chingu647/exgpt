@@ -12,7 +12,7 @@ from google.genai.errors import APIError
 FIXED_GOOGLE_API_KEY = st.secrets["GEMINI_API_KEY"]
 
 # RAG용 고정 PDF 파일 이름 (코드와 같은 폴더에 위치해야 함)
-FIXED_PDF_FILENAME = "guide.pdf"  
+FIXED_PDF_FILENAME = "abc.pdf"  
 
 
 # ==========================================
