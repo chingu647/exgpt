@@ -3,16 +3,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np 
 
-# 삼선 메뉴(MainMenu) 및 푸터(footer) 숨기기 CSS
-hide_menu_style = """
+# 상단 헤더, 배포(Deploy) 버튼 숨기기 추가
+additional_style = """
 <style>
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
+header {visibility: hidden;}
+.stDeployButton {display: none;}
 </style>
 """
 
-# HTML 형식으로 CSS 적용
-st.markdown(hide_menu_style, unsafe_allow_html=True)
+st.markdown(additional_style, unsafe_allow_html=True)
 
 
 with st.sidebar:
