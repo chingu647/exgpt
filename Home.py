@@ -4,30 +4,6 @@ import pandas as pd
 import numpy as np 
 
 # -----------------------------------------------------------------------------
-# 우측 상단 툴바(햄버거 및 배포 버튼)는 완전히 날리고 좌측 슬라이드만 살리기
-final_kill_style = """
-<style>
-/* 1. 우측 상단 툴바 전체(햄버거 메뉴, 배포 버튼, 런닝맨 등) 무조건 삭제 */
-[data-testid="stToolbar"] {
-    display: none !important;
-}
-
-/* 2. 상단 헤더 박스는 숨기지 말고 투명화 (좌측 슬라이드 버튼 위치 확보용) */
-header[data-testid="stHeader"] {
-    background-color: transparent !important;
-    background: transparent !important;
-}
-
-/* 3. 하단 푸터 숨기기 */
-footer {
-    visibility: hidden;
-}
-</style>
-"""
-
-st.markdown(final_kill_style, unsafe_allow_html=True)
-
-# 화면 확인용 컴포넌트
 # st.sidebar.title("좌측 슬라이드바")
 # st.sidebar.write("사이드바가 정상적으로 열리고 닫힙니다.")
 
