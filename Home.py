@@ -3,38 +3,35 @@ import streamlit as st
 import pandas as pd
 import numpy as np 
 
-# 좌측 화살표(슬라이드 토글)는 남기고 삼선 메뉴와 배포 버튼만 확실히 지우는 CSS
-final_style = """
+# 우측 상단 툴바(햄버거 및 배포 버튼)는 완전히 날리고 좌측 슬라이드만 살리기
+final_kill_style = """
 <style>
-/* 1. 우측 삼선 메뉴(햄버거 버튼) 완전히 제거 */
-[data-testid="stActionButton"] {
+/* 1. 우측 상단 툴바 전체(햄버거 메뉴, 배포 버튼, 런닝맨 등) 무조건 삭제 */
+[data-testid="stToolbar"] {
     display: none !important;
 }
 
-/* 2. 배포(Deploy) 버튼 완전히 제거 (두 가지 버전 클래스 모두 대응) */
-.stDeployButton, .stAppDeployButton {
-    display: none !important;
-}
-
-/* 3. 하단 푸터(Made with Streamlit) 제거 */
-footer {
-    visibility: hidden;
-}
-
-/* 4. (선택) 헤더 영역의 불필요한 배경을 투명화하여 좌측 화살표만 깔끔하게 노출 */
+/* 2. 상단 헤더 박스는 숨기지 말고 투명화 (좌측 슬라이드 버튼 위치 확보용) */
 header[data-testid="stHeader"] {
     background-color: transparent !important;
+    background: transparent !important;
+}
+
+/* 3. 하단 푸터 숨기기 */
+footer {
+    visibility: hidden;
 }
 </style>
 """
 
-st.markdown(final_style, unsafe_allow_html=True)
+st.markdown(final_kill_style, unsafe_allow_html=True)
 
-# 테스트용 사이드바 및 본문 코드
+# 화면 확인용 컴포넌트
 st.sidebar.title("좌측 슬라이드바")
-st.sidebar.write("성공! 화살표가 보이며 정상 작동합니다.")
-st.title("메인 화면")
-st.write("우측 상단의 삼선 메뉴와 배포 버튼만 깔끔하게 숨겨졌습니다.")
+st.sidebar.write("사이드바가 정상적으로 열리고 닫힙니다.")
+
+st.title("최종 메인 화면")
+st.write("우측 상단의 햄버거 삼선 메뉴와 배포 버튼이 완벽히 사라졌습니다.")
 
 
 
