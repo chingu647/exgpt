@@ -3,15 +3,28 @@ import streamlit as st
 import pandas as pd
 import numpy as np 
 
-# 상단 헤더, 배포(Deploy) 버튼 숨기기 추가
-additional_style = """
+# 좌측 사이드바 버튼은 남기고 삼선 메뉴, 배포 버튼, 푸터만 숨기기
+hide_elements_style = """
 <style>
-header {visibility: hidden;}
-.stDeployButton {display: none;}
+/* 1. 삼선 메뉴 숨기기 */
+#MainMenu {visibility: hidden;}
+
+/* 2. 배포(Deploy) 버튼 숨기기 (버전별 호환) */
+.stDeployButton {display: none !important;}
+.stAppDeployButton {display: none !important;}
+
+/* 3. 하단 푸터 숨기기 */
+footer {visibility: hidden;}
+
+/* 4. 헤더 자체는 남겨두되 투명하게 만들고 높이를 줄여 사이드바 버튼 위치 확보 */
+header[data-testid="stHeader"] {
+    background-color: rgba(0,0,0,0) !important;
+    background: transparent !important;
+}
 </style>
 """
 
-st.markdown(additional_style, unsafe_allow_html=True)
+st.markdown(hide_elements_style, unsafe_allow_html=True)
 
 
 with st.sidebar:
