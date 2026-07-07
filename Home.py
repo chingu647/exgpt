@@ -108,7 +108,7 @@ if prompt := st.chat_input():
     with st.spinner("답변 생성 중..."):
         try:
             response = client.models.generate_content(
-                model='gemini-2.5-flash',
+                model='gemini-2.5-flash-lite',
                 contents=contents_payload,
             )
             msg = response.text
