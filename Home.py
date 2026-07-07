@@ -55,7 +55,7 @@ def upload_fixed_file_once(api_key: str, file_path: str):
 # ==========================================
 # 메인 화면 구성 및 챗 초기화
 # ==========================================
-st.title("💬 전북 RAG Chatbot")
+st.title("💬 전북 Chatbot")
 st.caption("🚀 고정 지침 문서를 기반으로 답변하는 안내 챗봇입니다.")
 
 # 비밀키 기반으로 구글 파일 자동 등록
