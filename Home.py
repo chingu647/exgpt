@@ -28,12 +28,11 @@ footer {
 st.markdown(final_kill_style, unsafe_allow_html=True)
 
 # 화면 확인용 컴포넌트
-st.sidebar.title("좌측 슬라이드바")
-st.sidebar.write("사이드바가 정상적으로 열리고 닫힙니다.")
+# st.sidebar.title("좌측 슬라이드바")
+# st.sidebar.write("사이드바가 정상적으로 열리고 닫힙니다.")
 
-st.title("최종 메인 화면")
-st.write("우측 상단의 햄버거 삼선 메뉴와 배포 버튼이 완벽히 사라졌습니다.")
-
+# st.title("최종 메인 화면")
+# st.write("우측 상단의 햄버거 삼선 메뉴와 배포 버튼이 완벽히 사라졌습니다.")
 # -----------------------------------------------------------------------------
 
 with st.sidebar:
