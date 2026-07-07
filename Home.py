@@ -11,6 +11,7 @@ import numpy as np
 # st.write("우측 상단의 햄버거 삼선 메뉴와 배포 버튼이 완벽히 사라졌습니다.")
 # -----------------------------------------------------------------------------
 
+st.sidebar.title("좌측 슬라이드바")
 with st.sidebar:
     "[메뉴 1 : 네이버](https://www.naver.com)"
     "[메뉴 2 : 다음](https://www.daum.net)"
