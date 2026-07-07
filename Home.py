@@ -8,7 +8,7 @@ with st.sidebar:
     "[메뉴 2 : 다음](https://www.daum.net)"
     "[메뉴 3 : 구글](https://www.google.com)"
 
-st.title("💬 Chatbot")
+st.title("💬 ex전북 Chatbot")
 st.caption("🚀 A RAG chatbot powered by OpenAI")
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "무엇을 도와 드릴까요?"}]
