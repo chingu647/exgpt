@@ -37,19 +37,29 @@ def get_gemini_client(api_key: str):
 
 
 # ==========================================
-# [고정 파일 처리] 서버 시작 시 딱 1번만 구글 서버에 등록
+# [고정 파일 처리] 중복 업로드 방지 및 기존 파일 재사용
 # ==========================================
 @st.cache_resource
 def upload_fixed_file_once(api_key: str, file_path: str):
     if not os.path.exists(file_path):
-        return None, None
+        return None
         
     client = genai.Client(api_key=api_key)
+    target_display_name = os.path.basename(file_path)
+    
     try:
+        # 1. 구글 서버에 이미 업로드된 파일 목록 조회
+        for file in client.files.list():
+            # 파일명이 같고 상태가 ACTIVE(사용 가능)이면 해당 파일 객체를 그대로 재사용 [2]
+            if file.display_name == target_display_name and file.state.name == "ACTIVE":
+                return file
+        
+        # 2. 중복 파일이 없는 경우에만 새로 업로드 실행 (20GB 저장소 고갈 방지)
         google_file = client.files.upload(file=file_path)
-        return google_file.uri, google_file.mime_type
-    except Exception:
-        return None, None
+        return google_file
+    except Exception as e:
+        st.error(f"⚠️ 파일 업로드 확인 중 오류 발생: {e}")
+        return None
 
 
 # ==========================================
@@ -58,11 +68,11 @@ def upload_fixed_file_once(api_key: str, file_path: str):
 st.title("💬 전북 Chatbot")
 st.caption("🚀 고정 지침 문서를 기반으로 답변하는 안내 챗봇입니다.")
 
-# 비밀키 기반으로 구글 파일 자동 등록
-file_uri, file_mime = upload_fixed_file_once(FIXED_GOOGLE_API_KEY, FIXED_PDF_FILENAME)
+# 중복 방지 로직이 적용된 구글 파일 객체 가져오기
+google_file = upload_fixed_file_once(FIXED_GOOGLE_API_KEY, FIXED_PDF_FILENAME)
 
-if not file_uri:
-    st.warning(f"⚠️ 관리자 알림: 고정할 '{FIXED_PDF_FILENAME}' 파일이 소스 코드 폴더에 존재하지 않습니다.")
+if not google_file:
+    st.warning(f"⚠️ 관리자 알림: 고정할 '{FIXED_PDF_FILENAME}' 파일이 서버 환경에 없거나 업로드에 실패했습니다.")
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "안녕하세요! 무엇을 도와드릴까요? 준비된 문서를 바탕으로 친절히 답변해 드리겠습니다."}]
@@ -84,9 +94,9 @@ if prompt := st.chat_input("질문할 내용을 입력하세요..."):
 
     contents_payload = []
     
-    if file_uri:
-        file_part = types.Part.from_uri(file_uri=file_uri, mime_type=file_mime)
-        contents_payload.append(file_part)
+    # google-genai 1.0+ 규격에 맞춘 payload 구성 [1, 2]
+    if google_file:
+        contents_payload.append(google_file) # 파일 객체를 직접 추가 [1]
         instruction = f"반드시 첨부된 문서를 기반으로만 답변해 주세요. 사용자 질문: {prompt}"
         contents_payload.append(instruction)
     else:
@@ -104,6 +114,6 @@ if prompt := st.chat_input("질문할 내용을 입력하세요..."):
         
     except APIError as e:
         if e.code == 429:
-            st.error("⏳ 현재 사용자가 많아 요청 한도를 초과했습니다. 잠시 후 다시 입력해 주세요.")
+            st.error("⏳ 현재 사용량이 많아 요청 한도를 초과했습니다. 잠시 후 다시 입력해 주세요.")
         else:
             st.error(f"오류가 발생했습니다: {e}")
