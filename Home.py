@@ -3,6 +3,18 @@ import streamlit as st
 import pandas as pd
 import numpy as np 
 
+# 삼선 메뉴(MainMenu) 및 푸터(footer) 숨기기 CSS
+hide_menu_style = """
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style>
+"""
+
+# HTML 형식으로 CSS 적용
+st.markdown(hide_menu_style, unsafe_allow_html=True)
+
+
 with st.sidebar:
     "[메뉴 1 : 네이버](https://www.naver.com)"
     "[메뉴 2 : 다음](https://www.daum.net)"
