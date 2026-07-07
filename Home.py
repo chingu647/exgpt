@@ -17,14 +17,14 @@ FIXED_PDF_FILENAME = "abc.pdf"
 # ==========================================
 # [CSS] 우측 햄버거 메뉴 및 배포 버튼 완벽 삭제
 # ==========================================
-hide_elements_style = """
-<style>
-[data-testid="stToolbar"] { display: none !important; }
-header[data-testid="stHeader"] { background-color: transparent !important; background: transparent !important; }
-footer { visibility: hidden; }
-</style>
-"""
-st.markdown(hide_elements_style, unsafe_allow_html=True)
+# hide_elements_style = """
+# <style>
+# [data-testid="stToolbar"] { display: none !important; }
+# header[data-testid="stHeader"] { background-color: transparent !important; background: transparent !important; }
+# footer { visibility: hidden; }
+# </style>
+# """
+# st.markdown(hide_elements_style, unsafe_allow_html=True)
 
 
 # ==========================================
