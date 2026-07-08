@@ -80,7 +80,7 @@ def generate_content_with_retry(client, model, contents):
 st.subheader("💬 휴게소 업무 Chatbot")
 
 st.markdown(":rocket: :green[**휴게시설 업무기준**] 및 :sparkles: :green[**자체투자사업 매뉴얼 안내**]")
-st.caption(":point_right: 한국도로공사 전북본부  tel:063-714-6000")
+st.caption(":point_right: 한국도로공사 전북본부 :telephone_receiver: [063-714-6000](tel:063-714-6000)")
 
 st.divider()
 
