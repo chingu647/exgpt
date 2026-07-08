@@ -79,7 +79,7 @@ def generate_content_with_retry(client, model, contents):
 # ==========================================
 st.subheader("💬 휴게소 업무 Chatbot")
 
-st.metric("한국도로공사 전북본부","휴게시설 업무기준 및 자체투자사업 매뉴얼 안내", "작성일자 2026.07.08.")
+st.metric("한국도로공사 전북본부",":sunglasses: 휴게시설 업무기준 및 자체투자사업 매뉴얼 안내", "작성일자 2026.07.08.")
 
 st.divider()
 
