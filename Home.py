@@ -78,7 +78,7 @@ def generate_content_with_retry(client, model, contents):
 # 메인 화면 구성 및 챗 초기화
 # ==========================================
 st.subheader("💬 휴게소 업무 Chatbot")
-st.write("🚀 :sparkles:**휴게시설 업무기준** 및 **자체투자사업 매뉴얼** 안내")
+st.write(":rocket: :red[**휴게시설 업무기준**] 및 :sunglasses: :green[**자체투자사업 매뉴얼**] 안내")
 
 st.divider()
 
