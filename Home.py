@@ -79,9 +79,8 @@ def generate_content_with_retry(client, model, contents):
 # ==========================================
 st.subheader("💬 휴게소 업무 Chatbot")
 
-st.caption("한국도로공사 전북본부")
-st.markdown(":sunglasses: 휴게시설 업무기준 및 자체투자사업 매뉴얼 안내")
-st.caption("작성일자 : 2026.07.08.")
+st.markdown(":sunglasses: :green[**휴게시설 업무기준**] 및 :green[**자체투자사업 매뉴얼 안내**]")
+st.caption("                           made by 한국도로공사 전북본부")
 
 st.divider()
 
