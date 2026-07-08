@@ -78,7 +78,7 @@ def generate_content_with_retry(client, model, contents):
 # 메인 화면 구성 및 챗 초기화
 # ==========================================
 st.title("💬 전북 Chatbot")
-st.caption("🚀 고정 지침 문서를 기반으로 답변하는 안내 챗봇입니다.")
+st.caption("🚀 ex 휴게시설 업무기준 및 자체투자사업 매뉴얼 안내 챗봇입니다.")
 
 # [임시 관리 메뉴] 저장소 비우기 사이드바
 with st.sidebar:
@@ -103,7 +103,7 @@ if not google_file:
     st.warning(f"⚠️ 관리자 알림: 고정할 '{FIXED_PDF_FILENAME}' 파일이 서버 환경에 없거나 업로드에 실패했습니다.")
 
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "안녕하세요! 무엇을 도와드릴까요? 준비된 문서를 바탕으로 친절히 답변해 드리겠습니다."}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "무엇을 도와드릴까요? 준비된 문서를 바탕으로 답변해 드리겠습니다."}]
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
