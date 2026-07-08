@@ -11,7 +11,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_excep
 # [보안 및 설정] st.secrets를 통해 안전하게 키 가져오기
 # ==========================================
 FIXED_GOOGLE_API_KEY = st.secrets["GEMINI_API_KEY"]
-FIXED_PDF_FILENAME = "abc.pdf"  
+FIXED_PDF_FILENAME = "abcd.txt"  
 
 
 # ==========================================
@@ -77,8 +77,12 @@ def generate_content_with_retry(client, model, contents):
 # ==========================================
 # 메인 화면 구성 및 챗 초기화
 # ==========================================
-st.title("💬 전북 Chatbot")
-st.caption("🚀 고정 지침 문서를 기반으로 답변하는 안내 챗봇입니다.")
+st.subheader("💬 휴게소 업무 Chatbot")
+
+st.markdown(":rocket: :green[**휴게시설 업무기준**] 및 :sparkles: :green[**자체투자사업 매뉴얼 안내**]")
+st.caption(":point_right: 전화 문의 :  [063-714-6000](tel:063-714-6000)")
+
+st.divider()
 
 # [임시 관리 메뉴] 저장소 비우기 사이드바
 with st.sidebar:
@@ -103,7 +107,7 @@ if not google_file:
     st.warning(f"⚠️ 관리자 알림: 고정할 '{FIXED_PDF_FILENAME}' 파일이 서버 환경에 없거나 업로드에 실패했습니다.")
 
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "안녕하세요! 무엇을 도와드릴까요? 준비된 문서를 바탕으로 친절히 답변해 드리겠습니다."}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "무엇이 궁금하세요? 답변해 드리겠습니다."}]
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
