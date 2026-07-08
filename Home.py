@@ -11,7 +11,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_excep
 # [보안 및 설정] st.secrets를 통해 안전하게 키 가져오기
 # ==========================================
 FIXED_GOOGLE_API_KEY = st.secrets["GEMINI_API_KEY"]
-FIXED_PDF_FILENAME = "abc.pdf"  
+FIXED_PDF_FILENAME = "abcd.txt"  
 
 
 # ==========================================

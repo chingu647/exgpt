@@ -1,9 +1,11 @@
 import streamlit as st
 import tempfile
 import os
+import time
 from google import genai
 from google.genai import types
 from google.genai.errors import APIError
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 # ==========================================
 # [보안 및 설정] st.secrets를 통해 안전하게 키 가져오기
@@ -15,14 +17,14 @@ FIXED_PDF_FILENAME = "abc.pdf"
 # ==========================================
 # [CSS] 우측 햄버거 메뉴 및 배포 버튼 완벽 삭제
 # ==========================================
-hide_elements_style = """
-<style>
-[data-testid="stToolbar"] { display: none !important; }
-header[data-testid="stHeader"] { background-color: transparent !important; background: transparent !important; }
-footer { visibility: hidden; }
-</style>
-"""
-st.markdown(hide_elements_style, unsafe_allow_html=True)
+# hide_elements_style = """
+# <style>
+# [data-testid="stToolbar"] { display: none !important; }
+# header[data-testid="stHeader"] { background-color: transparent !important; background: transparent !important; }
+# footer { visibility: hidden; }
+# </style>
+# """
+# st.markdown(hide_elements_style, unsafe_allow_html=True)
 
 
 # ==========================================
@@ -57,32 +59,43 @@ def upload_fixed_file_once(api_key: str, file_path: str):
 
 
 # ==========================================
+# 🔥 [안정성 강화] 429 에러 발생 시 자동 재시도 함수 (지수 백오프)
+# ==========================================
+# 429 APIError가 발생하면 2초, 4초, 8초 간격을 두고 최대 3번 자동으로 재시도합니다.
+@retry(
+    retry=retry_if_exception_type(APIError),
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=2, min=2, max=10),
+    reraise=True
+)
+def generate_content_with_retry(client, model, contents):
+    # 스트리밍 방식은 중간 실패 시 백오프 처리가 까다로우므로 
+    # 무료 티어 안정성을 위해 일반 생성(generate_content) 방식으로 처리합니다.
+    return client.models.generate_content(model=model, contents=contents)
+
+
+# ==========================================
 # 메인 화면 구성 및 챗 초기화
 # ==========================================
 st.title("💬 전북 Chatbot")
 st.caption("🚀 고정 지침 문서를 기반으로 답변하는 안내 챗봇입니다.")
 
-# ------------------------------------------
-# 🔥 [임시 추가] 스트림릿 웹에서 구글 서버 파일 일괄 청소하는 버튼
-# ------------------------------------------
-with st.sidebar: # 관리 편의를 위해 사이드바에 배치합니다.
+# [임시 관리 메뉴] 저장소 비우기 사이드바
+with st.sidebar:
     st.header("⚙️ 관리자 전용 메뉴")
     if st.button("🗑️ 구글 API 저장소 중복 파일 일괄 삭제"):
-        with st.spinner("구글 서버 청소 중... 잠시만 기다려주세요."):
+        with st.spinner("구글 서버 청소 중..."):
             try:
                 client = genai.Client(api_key=FIXED_GOOGLE_API_KEY)
                 deleted_count = 0
                 for file in client.files.list():
                     client.files.delete(name=file.name)
                     deleted_count += 1
-                
-                # 중복 업로드 방지 캐시 초기화
                 st.cache_resource.clear() 
-                st.success(f"✨ 청소 완료! 총 {deleted_count}개의 파일이 구글 서버에서 영구 삭제되었습니다.")
-                st.rerun() # 화면 새로고침
+                st.success(f"✨ 청소 완료! 총 {deleted_count}개의 파일이 삭제되었습니다.")
+                st.rerun()
             except Exception as e:
                 st.error(f"삭제 실패: {e}")
-# ------------------------------------------
 
 google_file = upload_fixed_file_once(FIXED_GOOGLE_API_KEY, FIXED_PDF_FILENAME)
 
@@ -116,16 +129,20 @@ if prompt := st.chat_input("질문할 내용을 입력하세요..."):
 
     try:
         with st.chat_message("assistant"):
-            response_stream = client.models.generate_content_stream(
-                model='gemini-2.5-flash-lite',
-                contents=contents_payload,
-            )
-            msg = st.write_stream(chunk.text for chunk in response_stream)
+            with st.spinner("답변을 생성 중입니다... (무료 한도 초과 시 자동 재시도 중)"):
+                # 안전하게 재시도 로직이 적용된 함수 호출
+                response = generate_content_with_retry(
+                    client=client,
+                    model='gemini-2.5-flash-lite',
+                    contents=contents_payload
+                )
+                msg = response.text
+                st.write(msg)
         
         st.session_state.messages.append({"role": "assistant", "content": msg})
         
     except APIError as e:
         if e.code == 429:
-            st.error("⏳ 현재 사용량이 많아 요청 한도를 초과했습니다. 잠시 후 다시 입력해 주세요.")
+            st.error("⏳ 구글 API 무료 제한을 완전히 초과했습니다. 약 1분 뒤에 다시 시도해 주세요. 해결을 원하시면 Google AI Studio에서 결제 연동(유료 티어 전환)을 추천합니다.")
         else:
             st.error(f"오류가 발생했습니다: {e}")
