@@ -84,7 +84,7 @@ def send_telegram_detail_alert(user_name, user_email, help_content):
         "parse_mode": "Markdown"
     }
 
- 
+ 
     try:
         response = requests.post(url, json=payload, timeout=5)
         if response.status_code == 200:
