@@ -127,12 +127,12 @@ def show_chatbot():
 # 2. 현황 화면 (플레이스홀더)
 def show_overview():
     st.subheader("💰 현황 ", width="stretch", text_alignment="center")
-    st.write("화면 개발 중 입니다.", width="stretch", text_alignment="center")
+    st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 # 3. 목록 화면 (플레이스홀더)
 def show_users():
     st.subheader("👥 목록", width="stretch", text_alignment="center")
-    st.write("화면 개발 중 입니다.", width="stretch", text_alignment="center")
+    st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 
 # ==========================================
