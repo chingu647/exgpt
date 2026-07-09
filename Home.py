@@ -242,7 +242,7 @@ def show_chatbot():
 
 # 2. 전북의 소리 화면
 def show_overview():
-    st.subheader("🗣 전북본부 News Week")
+    st.subheader("🗣 전북본부 News")
     st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
