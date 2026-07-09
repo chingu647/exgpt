@@ -242,13 +242,13 @@ def show_chatbot():
 
 # 2. 전북의 소리 화면
 def show_overview():
-    st.subheader("🗣 전북본부 News")
+    st.subheader("🗣 전북본부 뉴스")
     st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
 def show_users(): 
     c1, c2 = st.columns([3,1], vertical_alignment="center", border=False)
-    c1.subheader("✔  입점업체 Talk! 톡!")
+    c1.subheader("✔  입점업체(현장)의 소리")
     c2.markdown("☎ [063-714-6000](tel:063-714-6000)", width="stretch", text_alignment="right")
     st.markdown(":red[**입점업체**] (대금 지연지급 등) :red[**애로 사항**]을 알려 주세요.")
 
@@ -310,12 +310,12 @@ with st.sidebar:
 # ============ ==============================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["휴게소 챗봇", "전북의 소리", "입점업체 **SOS**"]
+TABS = ["휴게소 챗봇", "전북 뉴스", "입점업체 소리"]
 current = st.segmented_control("ex 전북본부", TABS, default="휴게소 챗봇", key="tab")
 
 if current == "휴게소 챗봇":
     show_chatbot()
-elif current == "전북의 소리":
+elif current == "전북 뉴스":
     show_overview()
-elif current == "입점업체 **SOS**":
+elif current == "입점업체 소리":
     show_users()
