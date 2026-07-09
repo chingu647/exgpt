@@ -7,3 +7,5 @@ trubrics>=1.4.3
 streamlit-feedback
 langchain-community==0.0.3
 google-genai
+streamlit-local-storage==0.0.1 
+tenacity

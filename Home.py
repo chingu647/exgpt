@@ -7,10 +7,13 @@ from google import genai
 from google.genai import types
 from google.genai.errors import APIError
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+# 📦 브라우저 로컬 스토리지 라이브러리 추가
+from streamlit_local_storage import LocalStorage
 
 # ==========================================
-# 🔄 API 키 풀(Pool) 초기화 및 헬퍼 함수
+# 🔒 보안 환경변수 및 패키지 초기화
 # ==========================================
+# 1. Gemini API 키 풀 검증
 if "key_pool" not in st.session_state:
     try:
         api_keys = st.secrets["gemini"]["api_keys"]
@@ -19,10 +22,38 @@ if "key_pool" not in st.session_state:
         st.error("⚠️ st.secrets에 'gemini.api_keys' 배열이 올바르게 구성되지 않았습니다.")
         st.stop()
 
+# 2. 텔레그램 API 키 검증
+try:
+    TELEGRAM_TOKEN = st.secrets["TELEGRAM_TOKEN"]
+    CHAT_ID = st.secrets["CHAT_ID"]
+except KeyError:
+    st.error("🚨 보안 설정(st.secrets)에 'TELEGRAM_TOKEN' 또는 'CHAT_ID'가 누락되었습니다.")
+    st.stop()
+
+# 3. 로컬 스토리지 모듈 초기화
+local_storage = LocalStorage()
+
 def get_current_api_key():
     return next(st.session_state.key_pool)
 
 FIXED_PDF_FILENAME = "abcd.txt"  
+
+# ==========================================
+# ⏱️ 60초 제한 체크 헬퍼 함수
+# ==========================================
+def get_allowed_time_remaining():
+    """60초 제한 중 브라우저에 남은 시간(초)을 계산"""
+    last_send_time = local_storage.getItem("last_help_send_time")
+    if last_send_time is None:
+        return 0
+    
+    current_time = time.time()
+    elapsed_time = current_time - float(last_send_time)
+    LIMIT_SECONDS = 60 # 60초 제한 설정
+    
+    if elapsed_time < LIMIT_SECONDS:
+        return int(LIMIT_SECONDS - elapsed_time)
+    return 0
 
 # ==========================================
 # [속도 최적화] 구글 API 클라이언트 캐싱
@@ -68,35 +99,28 @@ def generate_content_with_retry(client, model, contents):
 # 📊 각 화면별 렌더링 함수 정의
 # ==========================================
 
-# 1. 챗봇 화면 (기존 챗봇 메인 화면이었던 부분)
+# 1. 챗봇 화면
 def show_chatbot():
-
     st.caption(":point_right: :yellow-badge[전화 문의 :  [063-714-6000](tel:063-714-6000)]", width="stretch", text_alignment="right")
-
     st.subheader("💬 휴게소 업무 Chatbot", width="stretch", text_alignment="center")
     st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내", width="stretch", text_alignment="center")
-
     st.divider()
 
-    # 💬 채팅 내역 출력 파트
     if "messages" not in st.session_state:
         st.session_state["messages"] = [{"role": "assistant", "content": "무엇이 궁금하세요? 답변해 드리겠습니다."}]
 
     for msg in st.session_state.messages:
         st.chat_message(msg["role"]).write(msg["content"])
 
-    # 💬 사용자 채팅 입력 및 처리
     if prompt := st.chat_input("질문할 내용을 입력하세요..."):
         current_key = get_current_api_key()
         client = get_gemini_client(current_key)
-        
         google_file = upload_fixed_file_once(current_key, FIXED_PDF_FILENAME)
 
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
         contents_payload = []
-        
         if google_file:
             contents_payload.append(google_file)
             instruction = f"반드시 첨부된 문서를 기반으로만 답변해 주세요. 사용자 질문: {prompt}"
@@ -116,7 +140,7 @@ def show_chatbot():
                     st.write(msg)
             
             st.session_state.messages.append({"role": "assistant", "content": msg})
-            st.rerun() # 채팅 상태 즉시 반영을 위한 리런
+            st.rerun()
             
         except APIError as e:
             if e.code == 429:
@@ -124,15 +148,66 @@ def show_chatbot():
             else:
                 st.error(f"오류가 발생했습니다: {e}")
 
-# 2. 현황 화면 (플레이스홀더)
+# 2. 현황 화면
 def show_overview():
     st.subheader("💰 현황 ", width="stretch", text_alignment="center")
     st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
-# 3. 목록 화면 (플레이스홀더)
+# 3. 목록 화면 (⭐ 요구 사항 반영 완료)
 def show_users():
-    st.subheader("👥 목록", width="stretch", text_alignment="center")
-    st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
+    st.subheader("👥 목록 및 고객 지원", width="stretch", text_alignment="center")
+    st.markdown("문제가 발생했거나 도움이 필요하시면 아래 내용을 적어 제출해 주세요.", width="stretch", text_alignment="center")
+    
+    # 현재 유저 브라우저의 남은 제한 시간 체크
+    remaining = get_allowed_time_remaining()
+    if remaining > 0:
+        st.warning(f"🔒 도배 방지를 위해 잠시 발송이 제한됩니다. ({remaining}초 후 재요청 가능)")
+
+    # 폼 생성
+    with st.form("help_form", clear_on_submit=True):
+        name = st.text_input("이름 또는 닉네임", placeholder="홍길동")
+        email = st.text_input("답변받을 이메일 주소", placeholder="example@email.com")
+        content = st.text_area("도움이 필요한 내용을 상세히 적어주세요", placeholder="예: 화면이 멈췄어요.")
+        
+        submit_button = st.form_submit_button("❓ Help 요청하기")
+
+    if submit_button:
+        # 실시간 교차 시간 검증 (새로고침 우회 원천 차단)
+        remaining_check = get_allowed_time_remaining()
+        
+        if remaining_check > 0:
+            st.error(f"🚨 요청 실패: {remaining_check}초 후에 다시 보낼 수 있습니다.")
+        elif not name or not content:
+            st.warning("이름과 문의 내용은 필수 입력 항목입니다.")
+        elif len(content) > 1000:
+            st.error("보안을 위해 문의 내용은 1,000자 이하로만 작성해 주세요.")
+        else:
+            with st.spinner("관리자에게 상세 내용을 전달하는 중..."):
+                url = f"https://telegram.org{TELEGRAM_TOKEN}/sendMessage"
+                message = (
+                    "🚨 **[스트림릿 앱 Help 요청]**\n\n"
+                    f"👤 **요청자:** {user_name if 'user_name' in locals() else name}\n"
+                    f"📧 **이메일:** {email}\n"
+                    f"📝 **문의 내용:**\n{content}"
+                )
+                payload = {
+                    "chat_id": CHAT_ID,
+                    "text": message,
+                    "parse_mode": "Markdown"
+                }
+                
+                try:
+                    response = requests.post(url, json=payload, timeout=5)
+                    if response.status_code == 200:
+                        # 발송 성공 시 브라우저 내부에 현재 시간 낙인 찍기
+                        local_storage.setItem("last_help_send_time", str(time.time()))
+                        st.success("요청이 정상적으로 접수되었습니다! 텔레그램 알림 발송 완료.")
+                        time.sleep(1) # 토스트나 알림이 시각적으로 보이도록 보장
+                        st.rerun() # 화면을 즉시 새로고침하여 상단 warning 바 업데이트
+                    else:
+                        st.error(f"알림 전송 실패 (코드: {response.status_code})")
+                except Exception as e:
+                    st.error(f"알림 전송 중 서버 오류 발생: {e}")
 
 
 # ==========================================
@@ -159,12 +234,12 @@ with st.sidebar:
 # ==========================================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["챗봇", "현황", "목록"]
+TABS = ["챗봇", "현황", "call센터"]
 current = st.segmented_control("ex", TABS, default="챗봇", key="tab")
 
 if current == "챗봇":
     show_chatbot()
 elif current == "현황":
     show_overview()
-elif current == "목록":
+elif current == "call센터":
     show_users()
