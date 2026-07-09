@@ -249,7 +249,7 @@ def show_overview():
 def show_users():
     st.markdown("☎️ [063-714-6000](tel:063-714-6000)", width="stretch", text_alignment="right")
     st.subheader("👨‍💻 휴게소 Help 센터")
-    st.write("대금 미지급 사례 등 도움이 필요하신 내용을 적어 주세요.")
+    st.write("입점업체 (대금 지연지급 등) 도움이 필요하신 내용을 알려 주세요.")
 
     # 실시간 제한 시간 안내 바
     remaining = get_allowed_time_remaining()
