@@ -12,6 +12,63 @@ import requests
 # 📦 브라우저 쿠키 컨트롤러 라이브러리 추가
 from streamlit_cookies_controller import CookieController
 
+
+# ==========================================
+# 🔄 API 키 풀(Pool) 초기화 및 헬퍼 함수
+# ==========================================
+if "key_pool" not in st.session_state:
+    try:
+        api_keys = st.secrets["gemini"]["api_keys"]
+        st.session_state.key_pool = itertools.cycle(api_keys)
+    except KeyError:
+        st.error("⚠️ st.secrets에 'gemini.api_keys' 배열이 올바르게 구성되지 않았습니다.")
+        st.stop()
+
+def get_current_api_key():
+    return next(st.session_state.key_pool)
+
+FIXED_PDF_FILENAME = "abcd.txt"  
+
+# ==========================================
+# [속도 최적화] 구글 API 클라이언트 캐싱
+# ==========================================
+@st.cache_resource
+def get_gemini_client(api_key: str):
+    return genai.Client(api_key=api_key)
+
+# ==========================================
+# [고정 파일 처리] 구글 클라우드 업로드 체크
+# ==========================================
+def upload_fixed_file_once(api_key: str, file_path: str):
+    if not os.path.exists(file_path):
+        return None
+        
+    client = get_gemini_client(api_key)
+    target_display_name = os.path.basename(file_path)
+    
+    try:
+        for file in client.files.list():
+            if file.display_name == target_display_name and file.state.name == "ACTIVE":
+                return file
+        
+        google_file = client.files.upload(file=file_path)
+        return google_file
+    except Exception as e:
+        return None
+
+# ==========================================
+# 🔥 [안정성 강화] 429 에러 발생 시 자동 재시도
+# ==========================================
+@retry(
+    retry=retry_if_exception_type(APIError),
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=2, min=2, max=10),
+    reraise=True
+)
+def generate_content_with_retry(client, model, contents):
+    return client.models.generate_content(model=model, contents=contents)
+
+
 # ----------------- 🔒 1. 환경변수 및 보안 로드 -----------------
 try:
     TELEGRAM_TOKEN = st.secrets["TELEGRAM_TOKEN"]
