@@ -249,7 +249,7 @@ def show_overview():
 def show_users(): 
     c1, c2 = st.columns([3,1], vertical_alignment="center", border=False)
     c1.subheader("👨‍💻 입점업체 Help Center")
-    c2.markdown("☎️ [063-714-6000](tel:063-714-6000)", width="stretch", text_alignment="right")
+    c2.markdown("☎ [063-714-6000](tel:063-714-6000)", width="stretch", text_alignment="right")
     st.markdown(":red[**입점업체**] (대금 지연지급 등) :red[**애로 사항**]을 알려 주세요.")
 
     # 실시간 제한 시간 안내 바
@@ -310,12 +310,12 @@ with st.sidebar:
 # ==========================================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["휴게소가이드", "🚨긴급 공지", "입점업체 Help"]
-current = st.segmented_control("ex 전북본부", TABS, default="휴게소가이드", key="tab")
+TABS = ["🌈휴게소가이드", "💡긴급 공지", "입점업체 Help"]
+current = st.segmented_control("ex 전북본부", TABS, default="🌈휴게소가이드", key="tab")
 
-if current == "휴게소가이드":
+if current == "🌈휴게소가이드":
     show_chatbot()
-elif current == "🚨긴급 공지":
+elif current == "💡긴급 공지":
     show_overview()
 elif current == "입점업체 Help":
     show_users()
