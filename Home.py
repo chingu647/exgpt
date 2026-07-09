@@ -7,31 +7,33 @@ from google import genai
 from google.genai import types
 from google.genai.errors import APIError
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
-# 📦 브라우저 로컬 스토리지 라이브러리 추가
-from streamlit_local_storage import LocalStorage
+# 📦 브라우저 쿠키 컨트롤러 라이브러리 추가
+from streamlit_cookies_controller import CookieController
 
 # ==========================================
 # 🔒 보안 환경변수 및 패키지 초기화
 # ==========================================
-# 1. Gemini API 키 풀 검증
-if "key_pool" not in st.session_state:
-    try:
-        api_keys = st.secrets["gemini"]["api_keys"]
-        st.session_state.key_pool = itertools.cycle(api_keys)
-    except KeyError:
-        st.error("⚠️ st.secrets에 'gemini.api_keys' 배열이 올바르게 구성되지 않았습니다.")
-        st.stop()
+# 1. Gemini API 키 풀 검증 ++++++++++ 삭제?
+#if "key_pool" not in st.session_state:
+#    try:
+#        api_keys = st.secrets["gemini"]["api_keys"]
+#        st.session_state.key_pool = itertools.cycle(api_keys)
+#    except KeyError:
+#        st.error("⚠️ st.secrets에 'gemini.api_keys' 배열이 올바르게 구성되지 않았습니다.")
+#        st.stop()
 
 # 2. 텔레그램 API 키 검증
 try:
     TELEGRAM_TOKEN = st.secrets["TELEGRAM_TOKEN"]
-    CHAT_ID = st.secrets["CHAT_ID"]
+    CHAT_ID = st.secrets["CHAT_ID"] 
+    gemini_keys = st.secrets["gemini"]["api_keys"] 
 except KeyError:
-    st.error("🚨 보안 설정(st.secrets)에 'TELEGRAM_TOKEN' 또는 'CHAT_ID'가 누락되었습니다.")
+    st.error("🚨 보안 설정(st.secrets)에 '필수 키가 누락되었습니다.")
     st.stop()
 
 # 3. 로컬 스토리지 모듈 초기화
-local_storage = LocalStorage()
+
+controller = CookieController()
 
 def get_current_api_key():
     return next(st.session_state.key_pool)
@@ -41,19 +43,46 @@ FIXED_PDF_FILENAME = "abcd.txt"
 # ==========================================
 # ⏱️ 60초 제한 체크 헬퍼 함수
 # ==========================================
+
 def get_allowed_time_remaining():
-    """60초 제한 중 브라우저에 남은 시간(초)을 계산"""
-    last_send_time = local_storage.getItem("last_help_send_time")
+    """1분 제한 중 남은 시간(초)을 계산하는 함수 (쿠키 기반)"""
+
+    # 브라우저 쿠키에서 마지막 발송 시간 가져오기
+    last_send_time = controller.get("last_help_send_time")
     if last_send_time is None:
         return 0
-    
     current_time = time.time()
     elapsed_time = current_time - float(last_send_time)
-    LIMIT_SECONDS = 60 # 60초 제한 설정
-    
+    LIMIT_SECONDS = 60 # 1분 제한
     if elapsed_time < LIMIT_SECONDS:
         return int(LIMIT_SECONDS - elapsed_time)
     return 0
+
+
+def send_telegram_detail_alert(user_name, user_email, help_content):
+    """텔레그램 푸시 전송 및 브라우저 쿠키에 시간 저장"""
+
+    remaining_seconds = get_allowed_time_remaining()
+    if remaining_seconds > 0:
+        st.error(f"⚠️ 도배 방지를 위해 {remaining_seconds}초 후에 다시 요청해 주세요.")
+        return False
+    url = f"https://telegram.org{TELEGRAM_TOKEN}/sendMessage"
+    message = (
+        "🚨 **[스트림릿 앱 Help 요청]**\n\n"
+        f"👤 **요청자:** {user_name}\n"
+        f"📧 **이메일:** {user_email}\n"
+        f"📝 **문의 내용:**\n{help_content}"
+    )
+    payload = {"chat_id": CHAT_ID, "text": message, "parse_mode": "Markdown"}
+    try:
+        response = requests.post(url, json=payload, timeout=5)
+        if response.status_code == 200:
+            # ✅ 발송 성공 시 브라우저 쿠키에 현재 시간 저장
+            controller.set("last_help_send_time", str(time.time()))
+            return True
+        return False
+    except:
+        return False
 
 # ==========================================
 # [속도 최적화] 구글 API 클라이언트 캐싱

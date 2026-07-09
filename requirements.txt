@@ -8,4 +8,5 @@ streamlit-feedback
 langchain-community==0.0.3
 google-genai
 streamlit-local-storage==0.0.1 
+streamlit-cookies-controller
 tenacity
