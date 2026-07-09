@@ -70,6 +70,9 @@ def generate_content_with_retry(client, model, contents):
 
 # 1. 챗봇 화면 (기존 챗봇 메인 화면이었던 부분)
 def show_chatbot():
+
+    st.caption(":point_right: :yellow-badge[전화 문의 :  [063-714-6000](tel:063-714-6000)]", width="stretch", text_alignment="right")
+
     st.subheader("💬 휴게소 업무 Chatbot", width="stretch", text_alignment="center")
     st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼 안내**]", width="stretch", text_alignment="center")
 
@@ -157,9 +160,7 @@ with st.sidebar:
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
 TABS = ["챗봇", "개요", "사용자"]
-current = st.segmented_control("ex...", TABS, default="챗봇", key="tab")
-
-st.caption(":point_right: :yellow-badge[전화 문의 :  [063-714-6000](tel:063-714-6000)]", width="stretch", text_alignment="right")
+current = st.segmented_control("ex", TABS, default="챗봇", key="tab")
 
 if current == "챗봇":
     show_chatbot()
