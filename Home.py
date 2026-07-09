@@ -310,12 +310,12 @@ with st.sidebar:
 # ==========================================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["🇦🇮 휴게소가이드", "💡긴급 공지", "입점업체 Help"]
-current = st.segmented_control("ex 전북본부", TABS, default="🇦🇮 휴게소가이드", key="tab")
+TABS = ["휴게소가이드", "📢 긴급 공지", "입점업체 SOS"]
+current = st.segmented_control("ex 전북본부", TABS, default="휴게소가이드", key="tab")
 
-if current == "🇦🇮 휴게소가이드":
+if current == "휴게소가이드":
     show_chatbot()
-elif current == "💡긴급 공지":
+elif current == "📢 긴급 공지":
     show_overview()
-elif current == "입점업체 Help":
+elif current == "입점업체 SOS":
     show_users()
