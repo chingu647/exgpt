@@ -262,9 +262,9 @@ def show_users():
     with st.form(key=form_id, clear_on_submit=True):
         name = st.text_input("이름 또는 닉네임", placeholder="홍길동")
         email = st.text_input("답변받을 이메일 주소", placeholder="example@email.com")
-        content = st.text_area("도움이 필요한 내용을 상세히 적어주세요", placeholder="예: 담당자에게 메시지 전달 후 즉시 삭제됩니다.")
+        content = st.text_area("도움이 필요한 내용을 상세히 적어주세요", placeholder="예: 담당자에게 메시지 전달 후 즉시 삭제됩니다.\n 1분에 1회 등록 할 수 있습니다.")
         
-        submit_button = st.form_submit_button("❓ **Help 요청** (꾸~욱 누르세요^^)")
+        submit_button = st.form_submit_button("❓ **Help 요청** (꾸~욱 누르세요)")
 
     # ⚠️ 중요: submit_button 체크 로직은 with st.form과 같은 들여쓰기 라인(외부)에 위치해야 정상 작동합니다.
     if submit_button:
@@ -281,7 +281,7 @@ def show_users():
                 success = send_telegram_detail_alert(name, email, content)
                 if success:
                     st.success("요청이 정상적으로 접수되었습니다! 개발자 알림 발송 완료.")
-                    time.sleep(3) # 성공 메시지를 잠시 보여주기 위함
+                    time.sleep(8) # 성공 메시지를 잠시 보여주기 위함
                     st.rerun()
 
 
