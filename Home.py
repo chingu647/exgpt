@@ -290,7 +290,7 @@ def show_users():
 # ==========================================
 with st.sidebar:
     st.header("⚙️ 관리자 전용 메뉴")
-    if st.button("🗑️ 구글 API 저장소 중복 파일 일괄 삭제"):
+    if st.button("🗑️ 중복 파일 일괄 삭제"):
         with st.spinner("9개 프로젝트 전체 청소 중..."):
             try:
                 deleted_count = 0
