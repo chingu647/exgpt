@@ -309,10 +309,10 @@ with st.sidebar:
 # ==========================================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["업무 가이드", "현황", "Help 센터"]
-current = st.segmented_control("ex 전북본부", TABS, default="업무 가이드", key="tab")
+TABS = ["업무가이드", "현황", "Help 센터"]
+current = st.segmented_control("ex 전북본부", TABS, default="업무가이드", key="tab")
 
-if current == "업무 가이드":
+if current == "업무가이드":
     show_chatbot()
 elif current == "현황":
     show_overview()
