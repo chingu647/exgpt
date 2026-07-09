@@ -247,7 +247,7 @@ def show_overview():
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
 def show_users():
-    st.markdown(":point_right: :yellow-badge[전화 문의 :  [063-714-6000](tel:063-714-6000)]", width="stretch", text_alignment="right")
+    st.markdown(":telephone_receiver: :yellow[[063-714-6000](tel:063-714-6000)]", width="stretch", text_alignment="right")
     st.subheader("👨‍💻 휴게소 Help 센터")
     st.write("대금 미지급 사례 등 도움이 필요하신 내용을 적어 주세요.")
 
