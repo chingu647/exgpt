@@ -242,7 +242,7 @@ def show_chatbot():
 
 # 2. 긴급 공지 화면
 def show_overview():
-    st.subheader("🚨 본부에서 알려 드립니다. ")
+    st.subheader("📢 본부에서 알려 드립니다. ")
     st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
@@ -310,12 +310,12 @@ with st.sidebar:
 # ============ ==============================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["휴게소가이드", "📢 긴급 공지", "입점업체 **SOS**"]
+TABS = ["휴게소가이드", "긴급 공지", "입점업체 **SOS**"]
 current = st.segmented_control("ex 전북본부", TABS, default="휴게소가이드", key="tab")
 
 if current == "휴게소가이드":
     show_chatbot()
-elif current == "📢 긴급 공지":
+elif current == "긴급 공지":
     show_overview()
 elif current == "입점업체 **SOS**":
     show_users()
