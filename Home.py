@@ -104,7 +104,7 @@ def show_users():
                 success = send_telegram_detail_alert(name, email, content)
                 if success:
                     st.success("요청이 정상적으로 접수되었습니다! 개발자 알림 발송 완료.")
-                    time.sleep(1) # 성공 메시지를 잠시 보여주기 위함
+                    time.sleep(10) # 성공 메시지를 잠시 보여주기 위함
                     st.rerun()
 
 # ----------------- 🚀 5. 메인 실행부 -----------------
