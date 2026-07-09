@@ -242,7 +242,7 @@ def show_chatbot():
 
 # 2. 휴게소 성과 화면
 def show_overview():
-    st.subheader("🗣 2026 전북본부 휴게소 추진 과제")
+    st.subheader("🗣 2026 전북본부 주요 성과")
     st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
