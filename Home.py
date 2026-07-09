@@ -242,13 +242,13 @@ def show_chatbot():
 
 # 2. 전북의 소리 화면
 def show_overview():
-    st.subheader("🗣 전북의 소리")
+    st.subheader("🗣 전북에서 알려 드립니다.")
     st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
 def show_users(): 
     c1, c2 = st.columns([3,1], vertical_alignment="center", border=False)
-    c1.subheader("✔  입점업체 :red[Help]")
+    c1.subheader("✔  입점업체 :red[Help] 요청")
     c2.markdown("☎ [063-714-6000](tel:063-714-6000)", width="stretch", text_alignment="right")
     st.markdown(":red[**입점업체**] (대금 지연지급 등) :red[**애로 사항**]을 알려 주세요.")
 
