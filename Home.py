@@ -264,7 +264,7 @@ def show_users():
         email = st.text_input("답변받을 이메일 주소", placeholder="example@email.com")
         content = st.text_area("도움이 필요한 내용을 상세히 적어주세요", placeholder="예: 담당자에게 메시지 전달 후 즉시 삭제됩니다.")
         
-        submit_button = st.form_submit_button("❓ Help 요청(꾸~욱 누르세요^^")
+        submit_button = st.form_submit_button("❓ **Help 요청** (꾸~욱 누르세요^^)")
 
     # ⚠️ 중요: submit_button 체크 로직은 with st.form과 같은 들여쓰기 라인(외부)에 위치해야 정상 작동합니다.
     if submit_button:
