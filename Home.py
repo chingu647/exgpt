@@ -63,8 +63,7 @@ def get_allowed_time_remaining():
 
 def send_telegram_detail_alert(user_name, user_email, help_content):
     """사용자가 입력한 상세 내용을 개발자의 텔레그램 푸시 알림으로 전송"""
-
-   # ⏱️ 쿨타임 교차 검증
+    # ⏱️ 쿨타임 교차 검증
    remaining_seconds = get_allowed_time_remaining()
    if remaining_seconds > 0:
        st.error(f"⚠️ 너무 빠르게 연속 요청할 수 없습니다. {remaining_seconds}초 후에 다시 시도해 주세요.")
