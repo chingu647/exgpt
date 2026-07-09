@@ -71,7 +71,7 @@ def generate_content_with_retry(client, model, contents):
 # 1. 챗봇 화면 (기존 챗봇 메인 화면이었던 부분)
 def show_chatbot():
     st.subheader("💬 휴게소 업무 Chatbot", width="stretch", text_alignment="center")
-    st.markdown(":rocket: :green-badge[휴게시설 업무기준] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼 안내**]", width="stretch", text_alignment="center")
+    st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼 안내**]", width="stretch", text_alignment="center")
 
     st.divider()
 
