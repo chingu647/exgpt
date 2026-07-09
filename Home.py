@@ -262,7 +262,7 @@ def show_users():
     with st.form(key=form_id, clear_on_submit=True):
         name = st.text_input("이름 또는 닉네임", placeholder="홍길동")
         email = st.text_input("답변받을 이메일 주소", placeholder="example@email.com")
-        content = st.text_area("도움이 필요한 내용을 상세히 적어주세요", placeholder="예: 담당자에게 메시지 전달 후 즉시 삭제됩니다.\n60초가 지난 후 다시 등록하실 수 있습니다.\n\n중요한 내용은 반드시 전화를 이용하여 주시기 바랍니다.")
+        content = st.text_area("도움이 필요한 내용을 상세히 적어주세요", placeholder="예: 담당자에게 메시지 전달 후 즉시 삭제됩니다.\n\n60초가 지난 후 다시 등록하실 수 있습니다.\n\n⚠️ 중요한 내용은 반드시 전화를 이용하여 주시기 바랍니다.")
         
         submit_button = st.form_submit_button("❓ **Help 요청** (꾸~욱 누르세요)")
 
