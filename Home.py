@@ -317,5 +317,5 @@ if current == "휴게소가이드":
     show_chatbot()
 elif current == "📢 긴급 공지":
     show_overview()
-elif current == "입점업체 SOS":
+elif current == "입점업체 **SOS**":
     show_users()
