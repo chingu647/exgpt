@@ -248,7 +248,7 @@ def show_overview():
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
 def show_users():
     st.markdown("☎️ [063-714-6000](tel:063-714-6000)", width="stretch", text_alignment="right")
-    st.subheader("👨‍💻 휴게소 Help 센터")
+    st.subheader("👨‍💻 입점업체 Help Center")
     st.markdown(":red[**입점업체**] (대금 지연지급 등) :red[**애로 사항**]을 알려 주세요.")
 
     # 실시간 제한 시간 안내 바
