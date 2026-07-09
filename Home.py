@@ -1,18 +1,40 @@
 import streamlit as st
-import requests
+import tempfile
+import os
 import time
+import itertools
+from google import genai
+from google.genai import types
+from google.genai.errors import APIError
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+
+import requests
+# 📦 브라우저 쿠키 컨트롤러 라이브러리 추가
 from streamlit_cookies_controller import CookieController
 
 # ----------------- 🔒 1. 환경변수 및 보안 로드 -----------------
 try:
     TELEGRAM_TOKEN = st.secrets["TELEGRAM_TOKEN"]
-    CHAT_ID = st.secrets["CHAT_ID"]
-except KeyError as e:
-    st.error(f"🚨 보안 설정(st.secrets)에 필수 키가 누락되었습니다: {e}")
+    CHAT_ID = st.secrets["CHAT_ID"] 
+    gemini_keys = st.secrets["gemini"]["api_keys"] 
+except KeyError:
+    st.error("🚨 보안 설정(st.secrets)에 '필수 키가 누락되었습니다.")
     st.stop()
 
 # 쿠키 컨트롤러 객체 초기화
 controller = CookieController()
+
+def get_current_api_key():
+    return next(st.session_state.key_pool)
+
+
+
+#############################################
+# 오픈 book ^^
+
+FIXED_PDF_FILENAME = "abcd.txt"     
+#############################################
+
 
 # ----------------- ⏱️ 2. 1분 제한 계산 함수 -----------------
 def get_allowed_time_remaining():
@@ -69,6 +91,104 @@ def send_telegram_detail_alert(user_name, user_email, help_content):
         st.error(f"알림 전송 중 서버 연결 오류 발생: {e}")
         return False
 
+# ==========================================
+# [속도 최적화] 구글 API 클라이언트 캐싱
+# ==========================================
+@st.cache_resource
+def get_gemini_client(api_key: str):
+    return genai.Client(api_key=api_key)
+
+# ==========================================
+# [고정 파일 처리] 구글 클라우드 업로드 체크
+# ==========================================
+def upload_fixed_file_once(api_key: str, file_path: str):
+    if not os.path.exists(file_path):
+        return None
+        
+    client = get_gemini_client(api_key)
+    target_display_name = os.path.basename(file_path)
+    
+    try:
+        for file in client.files.list():
+            if file.display_name == target_display_name and file.state.name == "ACTIVE":
+                return file
+        
+        google_file = client.files.upload(file=file_path)
+        return google_file
+    except Exception as e:
+        return None
+
+# ==========================================
+# 🔥 [안정성 강화] 429 에러 발생 시 자동 재시도
+# ==========================================
+@retry(
+    retry=retry_if_exception_type(APIError),
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=2, min=2, max=10),
+    reraise=True
+)
+def generate_content_with_retry(client, model, contents):
+    return client.models.generate_content(model=model, contents=contents)
+
+
+# ==========================================
+# 📊 각 화면별 렌더링 함수 정의
+# ==========================================
+
+# 1. 챗봇 화면
+def show_chatbot():
+    st.caption(":point_right: :yellow-badge[전화 문의 :  [063-714-6000](tel:063-714-6000)]", width="stretch", text_alignment="right")
+    st.subheader("💬 휴게소 업무 Chatbot", width="stretch", text_alignment="center")
+    st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내", width="stretch", text_alignment="center")
+    st.divider()
+
+    if "messages" not in st.session_state:
+        st.session_state["messages"] = [{"role": "assistant", "content": "무엇이 궁금하세요? 답변해 드리겠습니다."}]
+
+    for msg in st.session_state.messages:
+        st.chat_message(msg["role"]).write(msg["content"])
+
+    if prompt := st.chat_input("질문할 내용을 입력하세요..."):
+        current_key = get_current_api_key()
+        client = get_gemini_client(current_key)
+        google_file = upload_fixed_file_once(current_key, FIXED_PDF_FILENAME)
+
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.chat_message("user").write(prompt)
+
+        contents_payload = []
+        if google_file:
+            contents_payload.append(google_file)
+            instruction = f"반드시 첨부된 문서를 기반으로만 답변해 주세요. 사용자 질문: {prompt}"
+            contents_payload.append(instruction)
+        else:
+            contents_payload.append(prompt)
+
+        try:
+            with st.chat_message("assistant"):
+                with st.spinner("답변을 생성 중입니다... (키 자동 교대 작동 중)"):
+                    response = generate_content_with_retry(
+                        client=client,
+                        model='gemini-2.5-flash-lite',
+                        contents=contents_payload
+                    )
+                    msg = response.text
+                    st.write(msg)
+            
+            st.session_state.messages.append({"role": "assistant", "content": msg})
+            st.rerun()
+            
+        except APIError as e:
+            if e.code == 429:
+                st.error("⏳ 9개 프로젝트의 임시 요청 한도가 일시적으로 모두 소진되었습니다. 잠시 후 전송 버튼을 한 번 더 눌러 다른 키로 호출해 보세요.")
+            else:
+                st.error(f"오류가 발생했습니다: {e}")
+
+# 2. 현황 화면
+def show_overview():
+    st.subheader("💰 현황 ", width="stretch", text_alignment="center")
+    st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
+
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
 def show_users():
     st.subheader("👨‍💻 고객 지원 및 Help 센터")
@@ -107,6 +227,37 @@ def show_users():
                     time.sleep(10) # 성공 메시지를 잠시 보여주기 위함
                     st.rerun()
 
-# ----------------- 🚀 5. 메인 실행부 -----------------
-if __name__ == "__main__":
+
+# ==========================================
+# ⚙️ 관리자 전용 사이드바 메뉴 (상시 유지)
+# ==========================================
+with st.sidebar:
+    st.header("⚙️ 관리자 전용 메뉴")
+    if st.button("🗑️ 구글 API 저장소 중복 파일 일괄 삭제"):
+        with st.spinner("9개 프로젝트 전체 청소 중..."):
+            try:
+                deleted_count = 0
+                for key in st.secrets["gemini"]["api_keys"]:
+                    temp_client = genai.Client(api_key=key)
+                    for file in temp_client.files.list():
+                        temp_client.files.delete(name=file.name)
+                        deleted_count += 1
+                st.cache_resource.clear() 
+                st.success(f"✨ 청소 완료! 모든 프로젝트에서 총 {deleted_count}개의 파일이 삭제되었습니다.")
+                st.rerun()
+            except Exception as e:
+                st.error(f"삭제 실패: {e}")
+
+
+# ==========================================
+# 🚦 메인 내비게이션 및 라우팅 순서
+# ==========================================
+TABS = ["챗봇", "현황", "call센터"]
+current = st.segmented_control("ex", TABS, default="챗봇", key="tab")
+
+if current == "챗봇":
+    show_chatbot()
+elif current == "현황":
+    show_overview()
+elif current == "call센터":
     show_users()
