@@ -124,15 +124,15 @@ def show_chatbot():
             else:
                 st.error(f"오류가 발생했습니다: {e}")
 
-# 2. 개요 화면 (플레이스홀더)
+# 2. 현황 화면 (플레이스홀더)
 def show_overview():
-    st.subheader("💰 개요 현황")
-    st.write("화면 개발 중 입니다.")
+    st.subheader("💰 현황 ", width="stretch", text_alignment="center")
+    st.write("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 # 3. 목록 화면 (플레이스홀더)
 def show_users():
-    st.subheader("👥 목록")
-    st.write("화면 개발 중 입니다.")
+    st.subheader("👥 목록", width="stretch", text_alignment="center")
+    st.write("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 
 # ==========================================
@@ -159,12 +159,12 @@ with st.sidebar:
 # ==========================================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["챗봇", "개요", "목록"]
+TABS = ["챗봇", "현황", "목록"]
 current = st.segmented_control("ex", TABS, default="챗봇", key="tab")
 
 if current == "챗봇":
     show_chatbot()
-elif current == "개요":
+elif current == "현황":
     show_overview()
 elif current == "목록":
     show_users()
