@@ -72,7 +72,6 @@ def generate_content_with_retry(client, model, contents):
 def show_chatbot():
     st.subheader("💬 휴게소 업무 Chatbot", width="stretch", text_alignment="center")
     st.markdown(":rocket: :green-badge[휴게시설 업무기준] 및 :sparkles: :green[**자체투자사업 매뉴얼 안내**]", width="stretch", text_alignment="center")
-    st.caption(":point_right: 전화 문의 :  [063-714-6000](tel:063-714-6000)", width="stretch", text_alignment="right")
 
     st.divider()
 
@@ -158,7 +157,7 @@ with st.sidebar:
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
 TABS = ["챗봇", "개요", "사용자"]
-current = st.segmented_control("ex 한국도로공사 전북본부 [063-714-6000](tel:063-714-6000)", TABS, default="챗봇", key="tab")
+current = st.segmented_control("ex 전북본부 :point-right: [063-714-6000](tel:063-714-6000)", TABS, default="챗봇", key="tab")
 
 if current == "챗봇":
     show_chatbot()
