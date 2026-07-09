@@ -74,7 +74,7 @@ def show_chatbot():
     st.caption(":point_right: :yellow-badge[전화 문의 :  [063-714-6000](tel:063-714-6000)]", width="stretch", text_alignment="right")
 
     st.subheader("💬 휴게소 업무 Chatbot", width="stretch", text_alignment="center")
-    st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼 안내**]", width="stretch", text_alignment="center")
+    st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내", width="stretch", text_alignment="center")
 
     st.divider()
 
@@ -127,7 +127,7 @@ def show_chatbot():
 # 2. 개요 화면 (플레이스홀더)
 def show_overview():
     st.subheader("💰 개요 현황")
-    st.write("개발 중 입니다.")
+    st.write("화면 개발 중 입니다.")
 
 # 3. 목록 화면 (플레이스홀더)
 def show_users():
@@ -159,12 +159,12 @@ with st.sidebar:
 # ==========================================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["챗봇", "개요", "사용자"]
+TABS = ["챗봇", "개요", "목록"]
 current = st.segmented_control("ex", TABS, default="챗봇", key="tab")
 
 if current == "챗봇":
     show_chatbot()
 elif current == "개요":
     show_overview()
-elif current == "사용자":
+elif current == "목록":
     show_users()
