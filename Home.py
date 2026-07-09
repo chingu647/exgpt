@@ -198,15 +198,15 @@ def show_overview():
 
 # 3. 목록 화면 (⭐ 요구 사항 반영 완료)
 def show_users():
-    st.subheader("👥 목록 및 고객 지원", width="stretch", text_alignment="center")
-    st.markdown("문제가 발생했거나 도움이 필요하시면 아래 내용을 적어 제출해 주세요.", width="stretch", text_alignment="center")
-    
-    # 현재 유저 브라우저의 남은 제한 시간 체크
+    st.subheader("👨‍💻 고객 지원 및 Help 센터")
+    st.write("문제가 발생했거나 도움이 필요하시면 아래 내용을 적어 제출해 주세요.")
+
+    # 현재 브라우저의 1분 제한 상태 실시간 파악 및 UI 피드백
     remaining = get_allowed_time_remaining()
     if remaining > 0:
-        st.warning(f"🔒 도배 방지를 위해 잠시 발송이 제한됩니다. ({remaining}초 후 재요청 가능)")
+        st.warning(f"🔒 도배 방지를 위해 잠시 발송이 제한됩니다. (남은 시간: {remaining}초)")
 
-    # 폼 생성
+    # 입력 폼 구성 (제출 시 내부 필드 자동 초기화 옵션 적용)
     with st.form("help_form", clear_on_submit=True):
         name = st.text_input("이름 또는 닉네임", placeholder="홍길동")
         email = st.text_input("답변받을 이메일 주소", placeholder="example@email.com")
@@ -214,8 +214,8 @@ def show_users():
         
         submit_button = st.form_submit_button("❓ Help 요청하기")
 
+    # 제출 버튼 작동 로직
     if submit_button:
-        # 실시간 교차 시간 검증 (새로고침 우회 원천 차단)
         remaining_check = get_allowed_time_remaining()
         
         if remaining_check > 0:
@@ -223,35 +223,18 @@ def show_users():
         elif not name or not content:
             st.warning("이름과 문의 내용은 필수 입력 항목입니다.")
         elif len(content) > 1000:
-            st.error("보안을 위해 문의 내용은 1,000자 이하로만 작성해 주세요.")
+            st.error("보안 및 텔레그램 전송 용량 제한으로 인해 문의 내용은 1,000자 이하로만 작성해 주세요.")
         else:
-            with st.spinner("관리자에게 상세 내용을 전달하는 중..."):
-                url = f"https://telegram.org{TELEGRAM_TOKEN}/sendMessage"
-                message = (
-                    "🚨 **[스트림릿 앱 Help 요청]**\n\n"
-                    f"👤 **요청자:** {user_name if 'user_name' in locals() else name}\n"
-                    f"📧 **이메일:** {email}\n"
-                    f"📝 **문의 내용:**\n{content}"
-                )
-                payload = {
-                    "chat_id": CHAT_ID,
-                    "text": message,
-                    "parse_mode": "Markdown"
-                }
-                
-                try:
-                    response = requests.post(url, json=payload, timeout=5)
-                    if response.status_code == 200:
-                        # 발송 성공 시 브라우저 내부에 현재 시간 낙인 찍기
-                        local_storage.setItem("last_help_send_time", str(time.time()))
-                        st.success("요청이 정상적으로 접수되었습니다! 텔레그램 알림 발송 완료.")
-                        time.sleep(1) # 토스트나 알림이 시각적으로 보이도록 보장
-                        st.rerun() # 화면을 즉시 새로고침하여 상단 warning 바 업데이트
-                    else:
-                        st.error(f"알림 전송 실패 (코드: {response.status_code})")
-                except Exception as e:
-                    st.error(f"알림 전송 중 서버 오류 발생: {e}")
+            with st.spinner("관리자 텔레그램으로 상세 내용을 안전하게 전달하는 중..."):
+                success = send_telegram_detail_alert(name, email, content)
+                if success:
+                    st.success("요청이 정상적으로 접수되었습니다! 개발자 알림 발송 완료.")
+                    st.rerun()  # 화면을 새로고침하여 상단의 남은 시간 경고 바를 즉시 동기화합니다.
 
+# 스트림릿 메인 진입점
+if __name__ == "__main__":
+    st.title("My Streamlit Web App")
+    show_users()
 
 # ==========================================
 # ⚙️ 관리자 전용 사이드바 메뉴 (상시 유지)
