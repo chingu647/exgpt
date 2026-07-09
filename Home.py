@@ -242,7 +242,7 @@ def show_chatbot():
 
 # 2. 전북의 소리 화면
 def show_overview():
-    st.subheader("🗣 전북본부 소식")
+    st.subheader("🗣 전북본부 주요 일정")
     st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
@@ -310,12 +310,12 @@ with st.sidebar:
 # ============ ==============================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["휴게소 챗봇", "전북 뉴스", "입점업체 지원"]
+TABS = ["휴게소 챗봇", "전북 일정", "입점업체 지원"]
 current = st.segmented_control("ex 전북본부", TABS, default="휴게소 챗봇", key="tab")
 
 if current == "휴게소 챗봇":
     show_chatbot()
-elif current == "전북 뉴스":
+elif current == "전북 일정":
     show_overview()
 elif current == "입점업체 지원":
     show_users()
