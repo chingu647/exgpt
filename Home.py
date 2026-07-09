@@ -74,7 +74,7 @@ def send_telegram_detail_alert(user_name, user_email, help_content):
     payload = {
         "chat_id": CHAT_ID,
         "text": message,
-        "parse_mode": "Markdown"
+#        "parse_mode": "Markdown"
     }
     
     try:
