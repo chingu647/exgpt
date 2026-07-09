@@ -310,7 +310,7 @@ with st.sidebar:
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
 TABS = ["챗봇", "현황", "Help_센터"]
-current = st.segmented_control("ex", TABS, default="챗봇", key="tab")
+current = st.segmented_control("ex 전북본부", TABS, default="챗봇", key="tab")
 
 if current == "챗봇":
     show_chatbot()
