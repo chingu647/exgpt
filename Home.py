@@ -60,35 +60,34 @@ def get_allowed_time_remaining():
         return int(LIMIT_SECONDS - elapsed_time)
     return 0
 
-
 def send_telegram_detail_alert(user_name, user_email, help_content):
     """사용자가 입력한 상세 내용을 개발자의 텔레그램 푸시 알림으로 전송"""
+    
     # ⏱️ 쿨타임 교차 검증
     remaining_seconds = get_allowed_time_remaining()
     if remaining_seconds > 0:
         st.error(f"⚠️ 너무 빠르게 연속 요청할 수 없습니다. {remaining_seconds}초 후에 다시 시도해 주세요.")
         return False
-    # 🚨 [100% 완벽 고정] 주소 오타를 원천 차단한 올바른 API 엔드포인트 주소입니다.
-    # 기존 코드에 들어있던 잘못된 주소(https://telegram.org...)를 완전히 지우고 이 줄로 교체하셔야 합니다.
-    url = f"https://telegram.org{TELEGRAM_TOKEN}/sendMessage"
+
+    # 🚨 [하드코딩 방어벽] 더 이상 변수 조합 에러가 나지 않도록 완성된 실제 공식 주소를 직접 입력했습니다.
+    url = "https://telegram.org"
+    
     message = (
         "🚨 **[스트림릿 앱 Help 요청]**\n\n"
         f"👤 **요청자:** {user_name}\n"
         f"📧 **이메일:** {user_email}\n"
         f"📝 **문의 내용:**\n{help_content}"
     )
-
+    
     payload = {
         "chat_id": CHAT_ID,
         "text": message,
         "parse_mode": "Markdown"
     }
-
- 
+    
     try:
         response = requests.post(url, json=payload, timeout=5)
         if response.status_code == 200:
-        # 발송 성공 시 브라우저 쿠키에 현재 시간 기록
             controller.set("last_help_send_time", str(time.time()))
             return True
         else:
@@ -230,6 +229,7 @@ def show_users():
                 if success:
                     st.success("요청이 정상적으로 접수되었습니다! 개발자 알림 발송 완료.")
                     st.rerun()  # 화면을 새로고침하여 상단의 남은 시간 경고 바를 즉시 동기화합니다.
+
 
 
 # ==========================================
