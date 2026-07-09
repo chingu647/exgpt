@@ -240,9 +240,9 @@ def show_chatbot():
             else:
                 st.error(f"오류가 발생했습니다: {e}")
 
-# 2. 공지 사항 화면
+# 2. 전북 공지사항 화면
 def show_overview():
-    st.subheader("🗣 본부 알림 사항")
+    st.subheader("🗣 전북 공지사항")
     st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
@@ -310,12 +310,12 @@ with st.sidebar:
 # ============ ==============================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["휴게소가이드", "공지 사항", "입점업체**SOS**"]
+TABS = ["휴게소가이드", "전북 공지사항", "입점업체 **SOS**"]
 current = st.segmented_control("ex 전북본부", TABS, default="휴게소가이드", key="tab")
 
 if current == "휴게소가이드":
     show_chatbot()
-elif current == "공지 사항":
+elif current == "전북 공지사항":
     show_overview()
-elif current == "입점업체**SOS**":
+elif current == "입점업체 **SOS**":
     show_users()
