@@ -106,7 +106,7 @@ def show_chatbot():
 
         try:
             with st.chat_message("assistant"):
-                with st.spinner("답변을 생성 중입니다... (9개 키 자동 교대 작동 중)"):
+                with st.spinner("답변을 생성 중입니다... (키 자동 교대 작동 중)"):
                     response = generate_content_with_retry(
                         client=client,
                         model='gemini-2.5-flash-lite',
@@ -126,13 +126,13 @@ def show_chatbot():
 
 # 2. 개요 화면 (플레이스홀더)
 def show_overview():
-    st.header("💰 개요 현황")
-    st.write("개요 화면입니다.")
+    st.subheader("💰 개요 현황")
+    st.write("개발 중 입니다.")
 
-# 3. 사용자 화면 (플레이스홀더)
+# 3. 목록 화면 (플레이스홀더)
 def show_users():
-    st.header("👥 사용자 목록")
-    st.write("사용자 데이터 및 현황을 관리하는 화면입니다.")
+    st.subheader("👥 목록")
+    st.write("화면 개발 중 입니다.")
 
 
 # ==========================================
