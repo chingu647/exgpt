@@ -68,7 +68,7 @@ def send_telegram_detail_alert(user_name, user_email, help_content):
     if remaining_seconds > 0:
         st.error(f"⚠️ 도배 방지를 위해 {remaining_seconds}초 후에 다시 요청해 주세요.")
         return False
-    url = f"https://telegram.org{TELEGRAM_TOKEN}/sendMessage"
+    url = f"https://telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     message = (
         "🚨 **[스트림릿 앱 Help 요청]**\n\n"
         f"👤 **요청자:** {user_name}\n"
