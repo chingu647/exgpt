@@ -247,7 +247,7 @@ def show_overview():
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
 def show_users(): 
-    c1, c2 = st.columns([4,1])
+    c1, c2 = st.columns([4,1], vertical_alignment="center", border="True")
     c1.subheader("👨‍💻 입점업체 Help Center")
     c2.markdown("☎️ [063-714-6000](tel:063-714-6000)", width="stretch", text_alignment="right")
     st.markdown(":red[**입점업체**] (대금 지연지급 등) :red[**애로 사항**]을 알려 주세요.")
