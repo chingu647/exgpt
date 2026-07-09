@@ -195,7 +195,7 @@ def generate_content_with_retry(client, model, contents):
 # 1. 챗봇 화면
 def show_chatbot():
     st.subheader("💬 휴게소 업무 Chatbot")
-    st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내", width="stretch", text_alignment="center")
+    st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내", width="stretch", text_alignment="left")
     st.divider()
 
     if "messages" not in st.session_state:
