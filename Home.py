@@ -194,7 +194,7 @@ def generate_content_with_retry(client, model, contents):
 
 # 1. 챗봇 화면
 def show_chatbot():
-    st.subheader("💬 휴게소 업무 Chatbot")
+    st.subheader("💬 휴게소 Chatbot")
     st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내")
     st.divider()
 
@@ -309,12 +309,12 @@ with st.sidebar:
 # ==========================================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["챗봇", "현황", "Help_센터"]
+TABS = ["업무 가이드", "현황", "Help 센터"]
 current = st.segmented_control("ex 전북본부", TABS, default="챗봇", key="tab")
 
-if current == "챗봇":
+if current == "업무 가이드":
     show_chatbot()
 elif current == "현황":
     show_overview()
-elif current == "Help_센터":
+elif current == "Help 센터":
     show_users()
