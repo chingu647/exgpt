@@ -7,6 +7,8 @@ from google import genai
 from google.genai import types
 from google.genai.errors import APIError
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+
+import requests
 # 📦 브라우저 쿠키 컨트롤러 라이브러리 추가
 from streamlit_cookies_controller import CookieController
 
