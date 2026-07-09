@@ -194,7 +194,6 @@ def generate_content_with_retry(client, model, contents):
 
 # 1. 챗봇 화면
 def show_chatbot():
-    st.caption(":point_right: :yellow-badge[전화 문의 :  [063-714-6000](tel:063-714-6000)]", width="stretch", text_alignment="right")
     st.subheader("💬 휴게소 업무 Chatbot", width="stretch", text_alignment="center")
     st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내", width="stretch", text_alignment="center")
     st.divider()
@@ -248,6 +247,7 @@ def show_overview():
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
 def show_users():
+    st.markdown(":point_right: :yellow-badge[전화 문의 :  [063-714-6000](tel:063-714-6000)]", width="stretch", text_alignment="right")
     st.subheader("👨‍💻 휴게소 Help 센터")
     st.write("대금 미지급 등 도움이 필요하시면 아래 내용을 적어 제출해 주세요.")
 
