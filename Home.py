@@ -75,8 +75,8 @@ def generate_content_with_retry(client, model, contents):
 # 메인 화면 구성 및 챗 초기화
 # ==========================================
 st.subheader("💬 휴게소 업무 Chatbot")
-st.markdown(":rocket: :green[**휴게시설 업무기준**] 및 :sparkles: :green[**자체투자사업 매뉴얼 안내**]")
-st.caption(":point_right: 전화 문의 :  [063-714-6000](tel:063-714-6000)")
+st.markdown(":rocket: :green[**휴게시설 업무기준**] 및 :sparkles: :green[**자체투자사업 매뉴얼 안내**]", width="stretch", text_alignment="center")
+st.caption(":point_right: 전화 문의 :  [063-714-6000](tel:063-714-6000)", width="stretch", text_alignment="right")
 
 st.divider()
 
