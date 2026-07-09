@@ -194,7 +194,7 @@ def generate_content_with_retry(client, model, contents):
 
 # 1. 챗봇 화면
 def show_chatbot():
-    st.subheader("💬 휴게소 업무 Chatbot", width="stretch", text_alignment="center")
+    st.subheader("💬 휴게소 업무 Chatbot")
     st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내", width="stretch", text_alignment="center")
     st.divider()
 
@@ -242,7 +242,7 @@ def show_chatbot():
 
 # 2. 현황 화면
 def show_overview():
-    st.subheader("💰 현황 ", width="stretch", text_alignment="center")
+    st.subheader("💰 현황 ")
     st.markdown("화면 개발 중 입니다.", width="stretch", text_alignment="center")
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
