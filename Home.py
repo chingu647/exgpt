@@ -248,8 +248,8 @@ def show_overview():
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
 def show_users():
-    st.subheader("👨‍💻 고객 지원 및 Help 센터")
-    st.write("문제가 발생했거나 도움이 필요하시면 아래 내용을 적어 제출해 주세요.")
+    st.subheader("👨‍💻 휴게소 Help 센터")
+    st.write("대금 미지급 등 도움이 필요하시면 아래 내용을 적어 제출해 주세요.")
 
     # 실시간 제한 시간 안내 바
     remaining = get_allowed_time_remaining()
@@ -262,7 +262,7 @@ def show_users():
     with st.form(key=form_id, clear_on_submit=True):
         name = st.text_input("이름 또는 닉네임", placeholder="홍길동")
         email = st.text_input("답변받을 이메일 주소", placeholder="example@email.com")
-        content = st.text_area("도움이 필요한 내용을 상세히 적어주세요", placeholder="예: 화면이 멈췄어요.")
+        content = st.text_area("도움이 필요한 내용을 상세히 적어주세요", placeholder="예: 내용은 메시지 전달 후 바로 삭제됩니다.")
         
         submit_button = st.form_submit_button("❓ Help 요청하기")
 
@@ -309,12 +309,12 @@ with st.sidebar:
 # ==========================================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["챗봇", "현황", "call센터"]
+TABS = ["챗봇", "현황", "help센터"]
 current = st.segmented_control("ex", TABS, default="챗봇", key="tab")
 
 if current == "챗봇":
     show_chatbot()
 elif current == "현황":
     show_overview()
-elif current == "call센터":
+elif current == "help센터":
     show_users()
