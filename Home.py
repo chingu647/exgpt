@@ -68,7 +68,7 @@ def generate_content_with_retry(client, model, contents):
 # 📊 각 화면별 렌더링 함수 정의
 # ==========================================
 
-# 1. ex챗봇 화면 (기존 챗봇 메인 화면이었던 부분)
+# 1. 챗봇 화면 (기존 챗봇 메인 화면이었던 부분)
 def show_chatbot():
     st.subheader("💬 휴게소 업무 Chatbot", width="stretch", text_alignment="center")
     st.markdown(":rocket: :green-badge[휴게시설 업무기준] 및 :sparkles: :green[**자체투자사업 매뉴얼 안내**]", width="stretch", text_alignment="center")
@@ -157,10 +157,10 @@ with st.sidebar:
 # ==========================================
 # 🚦 메인 내비게이션 및 라우팅 순서
 # ==========================================
-TABS = ["ex챗봇", "개요", "사용자"]
-current = st.segmented_control("뷰 선택", TABS, default="ex챗봇", key="tab")
+TABS = ["챗봇", "개요", "사용자"]
+current = st.segmented_control("ex 한국도로공사 전북본부 [063-714-6000](tel:063-714-6000)", TABS, default="챗봇", key="tab")
 
-if current == "ex챗봇":
+if current == "챗봇":
     show_chatbot()
 elif current == "개요":
     show_overview()
