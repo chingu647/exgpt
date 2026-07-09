@@ -91,7 +91,8 @@ def send_telegram_detail_alert(user_name, user_email, help_content):
             controller.set("last_help_send_time", str(time.time()))
             return True
         else:
-            st.error(f"알림 전송 실패 (텔레그램 서버 응답 코드: {response.status_code})")
+#            st.error(f"알림 전송 실패 (텔레그램 서버 응답 코드: {response.status_code})")
+            st.error(f"텔레그램 서버 반환 오류 : {response.text})")
             return False
     except Exception as e:
         st.error(f"알림 전송 중 서버 연결 오류 발생: {e}")
