@@ -249,7 +249,7 @@ def show_overview():
 def show_users():
     st.markdown(":point_right: :yellow-badge[전화 문의 :  [063-714-6000](tel:063-714-6000)]", width="stretch", text_alignment="right")
     st.subheader("👨‍💻 휴게소 Help 센터")
-    st.write("대금 미지급 등 도움이 필요하시면 아래 내용을 적어 제출해 주세요.")
+    st.write("대금 미지급 사례 등 도움이 필요하신 내용을 적어 주세요.")
 
     # 실시간 제한 시간 안내 바
     remaining = get_allowed_time_remaining()
@@ -262,7 +262,7 @@ def show_users():
     with st.form(key=form_id, clear_on_submit=True):
         name = st.text_input("이름 또는 닉네임", placeholder="홍길동")
         email = st.text_input("답변받을 이메일 주소", placeholder="example@email.com")
-        content = st.text_area("도움이 필요한 내용을 상세히 적어주세요", placeholder="👉 담당자에게 **메시지 전달**후 **즉시 삭제**됩니다.\n⚠️ 60초가 지난 후 다시 등록하실 수 있습니다.\n⚠️ 중요한 내용은 반드시 전화를 이용하여 주시기 바랍니다.")
+        content = st.text_area("도움이 필요한 내용을 상세히 적어주세요", placeholder="👉 **담당자 전달 즉시 삭제**됩니다. 긴급한 내용은 전화를 이용해 주세요\n⚠️ 다시쓰기는 60초 이후 가능합니다.^^")
         
         submit_button = st.form_submit_button("❓ **Help 요청** (꾸~욱 누르세요)")
 
