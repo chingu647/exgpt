@@ -69,7 +69,7 @@ def send_telegram_detail_alert(user_name, user_email, help_content):
         st.error(f"⚠️ 너무 빠르게 연속 요청할 수 없습니다. {remaining_seconds}초 후에 다시 시도해 주세요.")
         return False
 
-    # 🚨 [하드코딩 방어벽] 더 이상 변수 조합 에러가 나지 않도록 완성된 실제 공식 주소를 직접 입력했습니다.
+    # 🚨 완성된 실제 공식 주소
     url = "https://telegram.org"
     
     message = (
@@ -87,16 +87,19 @@ def send_telegram_detail_alert(user_name, user_email, help_content):
     
     try:
         response = requests.post(url, json=payload, timeout=5)
+        
+        # 짚고 넘어가기: 텔레그램 서버가 200(성공)을 반환했을 때만 쿠키를 심도록 순서를 변경했습니다!
         if response.status_code == 200:
             controller.set("last_help_send_time", str(time.time()))
             return True
         else:
-#            st.error(f"알림 전송 실패 (텔레그램 서버 응답 코드: {response.status_code})")
-            st.error(f"텔레그램 서버 반환 오류 : {response.text})")
+            # 🔍 [여기가 핵심] 텔레그램 서버가 메시지를 거부한 진짜 이유를 빨간 창으로 띄웁니다.
+            st.error(f"❌ 텔레그램 서버 거부 원인: {response.text}")
             return False
     except Exception as e:
         st.error(f"알림 전송 중 서버 연결 오류 발생: {e}")
         return False
+
 
 # ==========================================
 # [속도 최적화] 구글 API 클라이언트 캐싱
