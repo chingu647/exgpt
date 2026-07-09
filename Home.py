@@ -290,7 +290,7 @@ def show_users():
 # ==========================================
 with st.sidebar:
     st.header("⚙️ 관리자 전용 메뉴")
-    if st.button("🗑️ 중복 파일 일괄 삭제"):
+    if st.button("🗑️ 신규파일 인식 및 중복파일 정리"):
         with st.spinner("9개 프로젝트 전체 청소 중..."):
             try:
                 deleted_count = 0
