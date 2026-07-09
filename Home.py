@@ -250,7 +250,7 @@ def show_users():
     c1, c2 = st.columns([3,1], vertical_alignment="center", border=False)
     c1.subheader("✔  입점업체(현장)의 소리")
     c2.markdown("☎ [063-714-6000](tel:063-714-6000)", width="stretch", text_alignment="right")
-    st.markdown(":red[**입점업체**] (대금 지연지급 등) :red[**애로 사항**]을 알려 주세요.")
+    st.markdown("(대금 미지급 등) :red[**애로 사항**]을 알려 주세요.")
 
     # 실시간 제한 시간 안내 바
     remaining = get_allowed_time_remaining()
@@ -265,7 +265,7 @@ def show_users():
         email = st.text_input("답변받을 이메일 주소", placeholder="example@email.com")
         content = st.text_area("도움이 필요한 내용을 상세히 적어주세요", placeholder="👉 **담당자 전달 즉시 삭제**됩니다. 긴급한 내용은 전화를 이용해 주세요\n\n  ※ 다시쓰기는 60초 이후 가능합니다.^^")
         
-        submit_button = st.form_submit_button("❓ **Help 요청**하기")
+        submit_button = st.form_submit_button("❓ **Help 요청하기**")
 
     # ⚠️ 중요: submit_button 체크 로직은 with st.form과 같은 들여쓰기 라인(외부)에 위치해야 정상 작동합니다.
     if submit_button:
