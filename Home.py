@@ -40,7 +40,7 @@ def send_telegram_detail_alert(user_name, user_email, help_content):
         return False
 
     # 🚨 하드코딩 주소 (중간에 오타가 섞이는 것을 방지하기 위해 완전한 실제 주소를 사용합니다)
-    url = "https://telegram.org"
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     
     message = (
         "🚨 **[스트림릿 앱 Help 요청]**\n\n"
