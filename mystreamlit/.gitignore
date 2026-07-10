@@ -1,0 +1,2 @@
+# 프로젝트 전역의 모든 Zone.Identifier 파일 차단
+**/*.Zone.Identifier
