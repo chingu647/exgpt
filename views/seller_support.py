@@ -1,8 +1,6 @@
 import streamlit as st
-
 import time 
 from src.telegram import send_telegram_detail_alert, get_allowed_time_remaining
-
 
 # ==========================================
 # # 2. 입점업체 지원 화면
@@ -10,9 +8,10 @@ from src.telegram import send_telegram_detail_alert, get_allowed_time_remaining
 
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
 def show_support(): 
-    c1, c2 = st.columns([3,1], vertical_alignment="center", border=False)
+    c1, c2 = st.columns([3, 1], vertical_alignment="center", border=False)
     c1.subheader("✔  입점업체 **SOS**")
-    c2.markdown("☎ [063-714-6000](tel:063-714-6000)", width="stretch", text_alignment="right")
+    # text_alignment 속성은 st.markdown에 없으므로 안전한 HTML 스타일로 대체 적용
+    c2.markdown("<div style='text-align: right;'><a href='tel:063-714-6000'>☎ 063-714-6000</a></div>", unsafe_allow_html=True)
     st.markdown("(대금 미지급 등) :red[**현장**]의 :red[**애로 사항**]을 알려 주세요.")
 
     # 실시간 제한 시간 안내 바
@@ -20,7 +19,7 @@ def show_support():
     if remaining > 0: 
         st.warning(f"🔒 도배 방지를 위해 잠시 발송이 제한됩니다. (남은 시간: {remaining}초)")
 
-    # 폼 키에 타임스탬프를 섞어 StreamlitAPIException(중복 폼 에러)을 원천 차단합니다.
+    # 폼 키에 타임스탬프를 섞어 중복 폼 에러를 차단합니다.
     form_id = f"help_form_session_{int(time.time() // 60)}"
     
     with st.form(key=form_id, clear_on_submit=True):
@@ -30,7 +29,7 @@ def show_support():
         
         submit_button = st.form_submit_button("❓ **Help 요청하기**")
 
-    # ⚠️ 중요: submit_button 체크 로직은 with st.form과 같은 들여쓰기 라인(외부)에 위치해야 정상 작동합니다.
+    # submit_button 체크 로직
     if submit_button:
         remaining_check = get_allowed_time_remaining()
         
@@ -44,6 +43,8 @@ def show_support():
             with st.spinner("관리자에게 상세 내용을 안전하게 전달하는 중..."):
                 success = send_telegram_detail_alert(name, email, content)
                 if success:
+                    # ⚠️ [개선] 사용자가 성공 메시지를 인지하고 곧바로 폼을 초기화 및 안내바 갱신을 하도록 처리
                     st.success("요청이 정상적으로 접수되었습니다! 개발자 알림 발송 완료.")
-                    time.sleep(8) # 성공 메시지를 잠시 보여주기 위함
+                    time.sleep(2)  # 8초 대기는 유저가 멈춘 것으로 오해할 수 있으므로 2초가 적당합니다.
                     st.rerun()
+
