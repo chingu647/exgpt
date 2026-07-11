@@ -2,6 +2,8 @@
 # streamlit 1. 경로 설정 
 # ###########################################################
 
+import streamlit as st
+
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -18,7 +20,7 @@ if "FIXED_PDF_FILENAME" not in st.session_state:
 
 
 
-import streamlit as st
+# ###########################################################
 from src.ui import render_admin_sidebar
 
 # 1. 공통 UI 컴포넌트 로드 (사이드바 메뉴 상시 노출)
