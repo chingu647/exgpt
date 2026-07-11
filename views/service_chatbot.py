@@ -1,6 +1,8 @@
 import streamlit as st
 from src.auth import get_current_api_key
+
 from src.gemini import get_gemini_client, upload_fixed_file_once, generate_content_with_retry
+from google.genai.errors import APIError
 
 
 # ==========================================
@@ -8,6 +10,12 @@ from src.gemini import get_gemini_client, upload_fixed_file_once, generate_conte
 # ==========================================
 
 def show_chatbot():
+
+# ⚠️ [해결] NameError 원천 차단: 함수 내부 로컬 스코프에 상수를 직접 정의
+    # Streamlit이 앱을 다시 그려도 이 함수가 실행되는 한 무조건 변수가 보장됩니다.
+    FIXED_PDF_FILENAME = "abcd.txt"
+
+
     st.subheader("💬 휴게소 Chatbot")
     st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내")
     st.divider()
