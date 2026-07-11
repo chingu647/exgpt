@@ -1,23 +1,19 @@
 import streamlit as st
 from src.auth import get_current_api_key
-
 from src.gemini import get_gemini_client, upload_fixed_file_once, generate_content_with_retry
 from google.genai.errors import APIError
 
-
 # 모듈 로드 시점에 세션 상태에 안전하게 기록
-
 FIXED_PDF_FILENAME = "abcd.txt"
 if "FIXED_PDF_FILENAME" not in st.session_state: 
-	st.session_state["FIXED_PDF_FILENAME"} = FIXED_PDF_FILENAME
-
+    # ⚠️ [해결] 중괄호 오타(})를 대괄호(])로 수정하여 SyntaxError 차단
+    st.session_state["FIXED_PDF_FILENAME"] = FIXED_PDF_FILENAME
 
 # ==========================================
 # # 1. 챗봇 화면
 # ==========================================
 
 def show_chatbot():
-
     st.subheader("💬 휴게소 Chatbot")
     st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내")
     st.divider()
@@ -29,13 +25,13 @@ def show_chatbot():
         st.chat_message(msg["role"]).write(msg["content"])
 
     if prompt := st.chat_input("질문할 내용을 입력하세요..."):
-
+        # ⚠️ [해결] 누락되었던 API Key 가져오기 코드 복구 (NameError 방지)
+        current_key = get_current_api_key()
         client = get_gemini_client(current_key)
 
-        # 함수 안에서 호출할 때는 세션 스테이트에서 안전하게 꺼내 씁니다.
-
-		filename = st.session_state["FIXED_PDF_FILENAME"]
-        google_file = upload_fixed_file_once(current_key, FIXED_PDF_FILENAME)
+        # ⚠️ [해결] 들여쓰기 공백 정렬 및 세션 안전 변수 바인딩
+        target_filename = st.session_state["FIXED_PDF_FILENAME"]
+        google_file = upload_fixed_file_once(current_key, target_filename)
 
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
@@ -67,3 +63,4 @@ def show_chatbot():
                 st.error("⏳ 9개 프로젝트의 임시 요청 한도가 일시적으로 모두 소진되었습니다. 잠시 후 전송 버튼을 한 번 더 눌러 다른 키로 호출해 보세요.")
             else:
                 st.error(f"오류가 발생했습니다: {e}")
+
