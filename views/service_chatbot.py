@@ -11,7 +11,7 @@ from google.genai.errors import APIError
 
 def show_chatbot():
     st.subheader("💬 휴게소 Chatbot")
-    st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내")
+    st.markdown(":rocket: :green[**휴게시설 업무기준**] 및 :sparkles: :green[**자체투자사업 매뉴얼**] 안내")
     st.divider()
 
     if "messages" not in st.session_state:
