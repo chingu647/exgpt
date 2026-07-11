@@ -1,6 +1,20 @@
+# ###########################################################
+# streamlit 1. 경로 설정 
+# ###########################################################
+
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+
+# ###########################################################
+# streamlit 2. 전역변수 설정 
+# ###########################################################
+
+FIXED_PDF_FILENAME = "abcd.txt"
+if "FIXED_PDF_FILENAME" not in st.session_state: 
+    # ⚠️ [해결] 중괄호 오타(})를 대괄호(])로 수정하여 SyntaxError 차단
+    st.session_state["FIXED_PDF_FILENAME"] = FIXED_PDF_FILENAME
 
 
 
@@ -16,12 +30,12 @@ current = st.segmented_control("ex 전북본부", TABS, default="휴게소 챗�
 
 if current == "휴게소 챗봇":
     from views import service_chatbot
-    service_chatbot.show_chatbot() # 내부에서 src.auth 및 src.data를 필요에 따라 import 사용
+    service_chatbot.show_chatbot() 
 
 elif current == "휴게소 성과":
     from views import service_overview
-    service_overview.show_overview() # 내부에서 src.auth 및 src.data를 필요에 따라 import 사용
+    service_overview.show_overview() 
 
 elif current == "입점업체 지원":
     from views import seller_support
-    seller_support.show_support() # 내부에서 src.auth 및 src.data를 필요에 따라 import 사용
+    seller_support.show_support() 
