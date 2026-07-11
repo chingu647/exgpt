@@ -9,13 +9,13 @@ TABS = ["휴게소 챗봇", "휴게소 성과", "입점업체 지원"]
 current = st.segmented_control("ex 전북본부", TABS, default="휴게소 챗봇", key="tab")
 
 if current == "휴게소 챗봇":
-    from pages import _1_💬_휴게소_챗봇 as chatbot
-    chatbot.show_chatbot() # 내부에서 src.auth 및 src.data를 필요에 따라 import 사용
+    from views import service_chatbot
+    service_chatbot.show_chatbot() # 내부에서 src.auth 및 src.data를 필요에 따라 import 사용
 
 elif current == "휴게소 성과":
-    from pages import _2_📊_휴게소_성과 as overview
-    overview.show_overview() # 내부에서 src.auth 및 src.data를 필요에 따라 import 사용
+    from views import service_overview
+    service_overview.show_overview() # 내부에서 src.auth 및 src.data를 필요에 따라 import 사용
 
-elif current == "휴게소 챗봇":
-    from pages import _3_🆘_입점업체_지원 as users
-    users.show_users() # 내부에서 src.auth 및 src.data를 필요에 따라 import 사용
+elif current == "입점업체 지원":
+    from views import seller_support
+    seller_support.show_support() # 내부에서 src.auth 및 src.data를 필요에 따라 import 사용
