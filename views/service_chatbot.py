@@ -5,16 +5,18 @@ from src.gemini import get_gemini_client, upload_fixed_file_once, generate_conte
 from google.genai.errors import APIError
 
 
+# 모듈 로드 시점에 세션 상태에 안전하게 기록
+
+FIXED_PDF_FILENAME = "abcd.txt"
+if "FIXED_PDF_FILENAME" not in st.session_state: 
+	st.session_state["FIXED_PDF_FILENAME"} = FIXED_PDF_FILENAME
+
+
 # ==========================================
 # # 1. 챗봇 화면
 # ==========================================
 
 def show_chatbot():
-
-# ⚠️ [해결] NameError 원천 차단: 함수 내부 로컬 스코프에 상수를 직접 정의
-    # Streamlit이 앱을 다시 그려도 이 함수가 실행되는 한 무조건 변수가 보장됩니다.
-    FIXED_PDF_FILENAME = "abcd.txt"
-
 
     st.subheader("💬 휴게소 Chatbot")
     st.markdown(":rocket: :green-badge[**휴게시설 업무기준**] 및 :sparkles: :green-badge[**자체투자사업 매뉴얼**] 안내")
@@ -27,8 +29,12 @@ def show_chatbot():
         st.chat_message(msg["role"]).write(msg["content"])
 
     if prompt := st.chat_input("질문할 내용을 입력하세요..."):
-        current_key = get_current_api_key()
+
         client = get_gemini_client(current_key)
+
+        # 함수 안에서 호출할 때는 세션 스테이트에서 안전하게 꺼내 씁니다.
+
+		filename = st.session_state["FIXED_PDF_FILENAME"]
         google_file = upload_fixed_file_once(current_key, FIXED_PDF_FILENAME)
 
         st.session_state.messages.append({"role": "user", "content": prompt})
