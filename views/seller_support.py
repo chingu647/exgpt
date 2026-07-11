@@ -10,6 +10,7 @@ from src.telegram import send_telegram_detail_alert, get_allowed_time_remaining
 def show_support(): 
     c1, c2 = st.columns([3, 1], vertical_alignment="center", border=False)
     c1.subheader("✔  입점업체 **SOS**")
+
     # text_alignment 속성은 st.markdown에 없으므로 안전한 HTML 스타일로 대체 적용
     c2.markdown("<div style='text-align: right;'><a href='tel:063-714-6000'>☎ 063-714-6000</a></div>", unsafe_allow_html=True)
     st.markdown("(대금 미지급 등) :red[**현장**]의 :red[**애로 사항**]을 알려 주세요.")
