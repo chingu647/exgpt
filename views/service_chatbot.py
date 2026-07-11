@@ -1,13 +1,9 @@
 import streamlit as st
+
 from src.auth import get_current_api_key
 from src.gemini import get_gemini_client, upload_fixed_file_once, generate_content_with_retry
 from google.genai.errors import APIError
 
-# 모듈 로드 시점에 세션 상태에 안전하게 기록
-FIXED_PDF_FILENAME = "abcd.txt"
-if "FIXED_PDF_FILENAME" not in st.session_state: 
-    # ⚠️ [해결] 중괄호 오타(})를 대괄호(])로 수정하여 SyntaxError 차단
-    st.session_state["FIXED_PDF_FILENAME"] = FIXED_PDF_FILENAME
 
 # ==========================================
 # # 1. 챗봇 화면
