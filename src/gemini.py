@@ -1,11 +1,10 @@
 import streamlit as st
 import os
+
 from google import genai
 from google.genai.errors import APIError
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
-
-FIXED_PDF_FILENAME = "abcd.txt"  
 
 
 # ==========================================
