@@ -11,9 +11,6 @@ except KeyError:
     st.error("🚨 보안 설정(st.secrets)에 필수 키가 누락되었습니다.")
     st.stop()
 
-def get_current_api_key():
-    return next(st.session_state.key_pool)
-
 
 # ----------------- ⏱️ 2. 1분 제한 계산 함수 -----------------
 def get_allowed_time_remaining():
