@@ -21,10 +21,10 @@ if "FIXED_PDF_FILENAME" not in st.session_state:
 
 
 # ###########################################################
-from src import admin_sidebar
+from src import admin_sidebar as as
 
 # 1. 공통 UI 컴포넌트 로드 (사이드바 메뉴 상시 노출)
-admin_sidebar.render_admin_sidebar()
+as.render_admin_sidebar()
 
 # 2. 메인 내비게이션 구성
 TABS = ["휴게소 챗봇", "휴게소 성과", "입점업체 지원"]
