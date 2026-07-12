@@ -26,7 +26,7 @@ def show_support():
     with st.form(key=form_id, clear_on_submit=True):
         name = st.text_input("이름 또는 닉네임", placeholder="홍길동")
         email = st.text_input("답변받을 이메일 (선택)", placeholder="example@email.com")
-        content = st.text_area("도움이 필요한 내용", placeholder="👉 **담당자에게 전달 즉시 메시지는 삭제**됩니다. \n\n  ※ 다시쓰기는 60초 이후 가능합니다.^^")
+        content = st.text_area("도움이 필요한 내용", placeholder="👉 담당자에게 전달 즉시 **메시지는 삭제**됩니다. \n\n  ※ 다시쓰기는 60초 이후 가능합니다.^^")
         
         submit_button = st.form_submit_button("❓ **Help 요청하기**")
 
