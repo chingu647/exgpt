@@ -14,10 +14,14 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 st.markdown(
     """
     <style>
-    /* 1. 우측 툴바 요소만 완벽 차단 */
+    /* 1. 우측 상단 툴바 및 배포 관련 모든 버튼(Fork 버튼 포함) 차단 */
     [data-testid="stActionButton"],
-    [data-testid="stMainMenu"] {
+    [data-testid="stMainMenu"],
+    [data-testid="stAppDeployDropdown"],
+    header button:has(svg path[d*="M18"]), /* Fork 아이콘 모양 정밀 조준 차단 */
+    .stAppDeployDropdown {
         display: none !important;
+        visibility: hidden !important;
     }
     
     /* 2. 하단 워터마크 숨기기 */
@@ -25,21 +29,23 @@ st.markdown(
         visibility: hidden !important;
     }
     
-    /* 3. 헤더 투명화 및 클릭 레이어 확보 */
+    /* 3. 헤더 투명화 */
     header[data-testid="stHeader"] {
         background-color: transparent !important;
         background: transparent !important;
     }
 
-    /* 4. [핵심] 사이드바 버튼 및 하위 모든 요소 완전 강제 노출 */
+    /* 4. [핵심] 오직 '사이드바 열기/닫기' 버튼만 콕 집어서 강제 노출 */
     div[data-testid="stSidebarCollapseButton"],
     div[data-testid="stSidebarCollapseButton"] *,
     button[aria-label="Close sidebar"],
-    button[aria-label="Open sidebar"] {
+    button[aria-label="Open sidebar"],
+    button[aria-label="Close sidebar"] *,
+    button[aria-label="Open sidebar"] * {
         visibility: visible !important;
         display: inline-flex !important;
         opacity: 1 !important;
-        transition: none !important; /* 사라지는 애니메이션 차단 */
+        transition: none !important;
     }
     </style>
     """,
