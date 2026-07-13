@@ -48,10 +48,10 @@ from src import admin_sidebar as ads
 ads.render_admin_sidebar()
 
 # 2. 메인 내비게이션 구성
-TABS = ["휴게소 챗봇", "입점업체 지원"]
-current = st.segmented_control("ex 전북본부", TABS, default="휴게소 챗봇", key="tab")
+TABS = ["휴게시설 챗봇", "입점업체 지원"]
+current = st.segmented_control("ex 전북본부", TABS, default="휴게시설 챗봇", key="tab")
 
-if current == "휴게소 챗봇":
+if current == "휴게시설 챗봇":
     from views import service_chatbot as sec
     sec.show_chatbot() 
 
