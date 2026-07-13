@@ -23,19 +23,6 @@ hide_streamlit_style = """
         footer {visibility: hidden !important;}
         #MainMenu {visibility: hidden !important;}
         
-        /* 3) 🔥 [최신 패치] 우측 하단 'Manage App' 관리자 도구 박스 완벽 차단 */
-        [data-testid="stStatusWidget"] {display: none !important; visibility: hidden !important; height: 0px !important;}
-        div[class*="stStatusWidget"] {display: none !important;}
-        
-        /* 4) 🔥 [최신 패치] 우측 하단 스트림릿 호스트/연결/배지 레이어 접두사 전체 차단 */
-        div[class^="viewerBadge"] {display: none !important;}
-        div[class*="viewerBadge"] {display: none !important;}
-        div[class^="stAppDeployWithStreamlit"] {display: none !important;}
-        div[class*="stAppDeployWithStreamlit"] {display: none !important;}
-        .viewerBadge_container__1QSob {display: none !important;}
-        
-        /* 임베드 형태의 메타 정보 바까지 추가 차단 */
-        div[class*="embeddedAppMetaInfoBar"] {display: none !important;}
     </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
