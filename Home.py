@@ -8,6 +8,22 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+# ###########################################################
+# 2. UI 요소 숨기기 (Custom CSS)
+# ###########################################################
+hide_streamlit_style = """
+    <style>
+        /* 우측 상단 깃허브 아이콘 및 Deploy 버튼 숨기기 */
+        #GithubIcon {visibility: hidden;}
+        .stDeployButton {display: none;}
+        
+        /* 화면 아래 'Made with Streamlit' 및 헤더 메뉴 숨기기 */
+        footer {visibility: hidden;}
+        #MainMenu {visibility: hidden;}
+        header {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 # ###########################################################
 # streamlit 2. 전역변수 설정 
