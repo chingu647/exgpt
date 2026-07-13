@@ -11,24 +11,31 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # ###########################################################
 # 2. UI 요소 숨기기 (Custom CSS)
 # ###########################################################
-# 2. UI 요소 숨기기 (업그레이드된 완벽 차단 CSS)
 hide_streamlit_style = """
     <style>
-        /* 1) 우측 상단 깃허브 아이콘 및 Deploy 버튼 숨기기 */
+        /* 1) 우측 상단 깃허브 아이콘, Deploy 버튼, 헤더 전체 숨기기 */
         #GithubIcon {visibility: hidden;}
-        .stDeployButton {display: none;}
+        .stDeployButton {display: none !important;}
+        .stAppDeployButton {display: none !important;}
+        header {visibility: hidden !important; height: 0px !important;}
         
-        /* 2) 화면 가운데 아래 'Made with Streamlit' 및 헤더 메뉴 숨기기 */
-        footer {visibility: hidden;}
-        #MainMenu {visibility: hidden;}
-        header {visibility: hidden;}
+        /* 2) 화면 가운데 아래 'Made with Streamlit' 및 기본 메뉴 숨기기 */
+        footer {visibility: hidden !important;}
+        #MainMenu {visibility: hidden !important;}
         
-        /* 3) ⚠️ [추가] 우측 하단 'Manage App' 관리자 도구 박스 숨기기 */
-        [data-testid="stStatusWidget"] {visibility: hidden !important;}
+        /* 3) 🔥 [최신 패치] 우측 하단 'Manage App' 관리자 도구 박스 완벽 차단 */
+        [data-testid="stStatusWidget"] {display: none !important; visibility: hidden !important; height: 0px !important;}
+        div[class*="stStatusWidget"] {display: none !important;}
         
-        /* 4) ⚠️ [추가] 우측 하단 스트림릿 호스트/연결 배지 레이어 통째로 숨기기 */
-        .stAppDeployWithStreamlit {display: none !important;}
+        /* 4) 🔥 [최신 패치] 우측 하단 스트림릿 호스트/연결/배지 레이어 접두사 전체 차단 */
+        div[class^="viewerBadge"] {display: none !important;}
+        div[class*="viewerBadge"] {display: none !important;}
         div[class^="stAppDeployWithStreamlit"] {display: none !important;}
+        div[class*="stAppDeployWithStreamlit"] {display: none !important;}
+        .viewerBadge_container__1QSob {display: none !important;}
+        
+        /* 임베드 형태의 메타 정보 바까지 추가 차단 */
+        div[class*="embeddedAppMetaInfoBar"] {display: none !important;}
     </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
