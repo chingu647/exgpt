@@ -15,13 +15,24 @@ def show_chatbot():
 #    st.markdown(":rocket: :green[**휴게시설 업무기준**] 및 :sparkles: :green[**자체투자사업 매뉴얼**] 안내")
     st.divider()
 
+    # 🔒 [보안 강화] 가독성을 높이고 핵심만 압축한 국정원 지침 준수용 경고 배너
+    st.error(
+        "⚠️ **[보안 필수 준수 사항]**\n\n"
+        "* **개인정보·실명 입력 절대 금지**: 질문 시 사람 이름, 주민번호, 특정 업체 실명은 빼고 입력하세요.\n"
+        "* **가명 처리 필수**: 대금 미지급 등 신고 조회 시 **'OO휴게소', '업체A'** 등으로 바꾸어 질문하십시오.\n"
+        "* **최종 확인 의무**: AI 답변은 참고용입니다. 중요 처분(계약해지 등)은 반드시 실제 원문 규정과 대조하세요."
+    )
+
     if "messages" not in st.session_state:
         st.session_state["messages"] = [{"role": "assistant", "content": "무엇이 궁금하세요? 답변해 드리겠습니다."}]
 
     for msg in st.session_state.messages:
         st.chat_message(msg["role"]).write(msg["content"])
 
-    if prompt := st.chat_input("질문 내용을 입력하세요 ... \n\n 예) 휴게소 입점업체 대금 미지급. 도공 처벌은? "):
+    # 🔒 [보안 통제] 직관적인 비식별화 예시를 담은 입력창 힌트(Placeholder) 적용
+    chat_placeholder = "질문을 입력하세요 (예: OO휴게소 업체A 대금 미지급 처분 기준은?)"
+
+    if prompt := st.chat_input(chat_placeholder):
         # ⚠️ [해결] 누락되었던 API Key 가져오기 코드 복구 (NameError 방지)
         current_key = get_current_api_key()
         client = get_gemini_client(current_key)
@@ -67,4 +78,3 @@ def show_chatbot():
             else:
                 st.error(f"오류가 발생했습니다: {e}")
                 
-
