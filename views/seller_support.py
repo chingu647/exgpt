@@ -17,7 +17,10 @@ def show_support():
     # 실시간 제한 시간 안내 바 
     remaining = get_allowed_time_remaining() 
     if remaining > 0: 
-        st.warning(f"🔒 다시 쓰기는 60초 후에 가능합니다. (남은 시간: {remaining}초)") 
+        # 현재 시간에 남은 초를 더해 재발송 가능 시각 계산
+        available_time = datetime.now() + timedelta(seconds=remaining)
+        available_time_str = available_time.strftime("%H시 %M분 %S초")
+        st.warning(f"🔒 다시 쓰기는 ({available_time_str}) 이후 가능합니다.") 
 
     # [개선] clear_on_submit을 False로 설정하여, 검증 실패 시 입력 내용이 지워지지 않도록 차단합니다.
     # [개선] 폼 ID가 분(Minute)마다 바뀌면 값이 유실될 수 있으므로 고정된 고유 키를 사용합니다.
