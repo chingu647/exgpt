@@ -11,44 +11,13 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # ###########################################################
 # 2. UI 요소 숨기기 (Custom CSS) - 접힘메뉴 복원 버전
 # ###########################################################
-st.markdown(
-    """
-    <style>
-    /* CSS 기본 정리 */
-    [data-testid="stActionButton"],
-    [data-testid="stMainMenu"],
-    footer {
-        display: none !important;
-    }
-    header[data-testid="stHeader"] {
-        background: transparent !important;
-    }
-    div[data-testid="stSidebarCollapseButton"],
-    div[data-testid="stSidebarCollapseButton"] * {
-        visibility: visible !important;
-        display: inline-flex !important;
-        opacity: 1 !important;
-    }
-    </style>
-    
-    <script>
-    // 깃허브 고양이 및 툴바 프레임을 감시하여 생성 즉시 파괴하는 스크립트
-    const observer = new MutationObserver((mutations) => {
-        // Streamlit 호스트 레이어의 깃허브 배지 및 상단 헤더 툴바 추적
-        const cloudElements = parent.document.querySelectorAll('.stViewerBadge, [class*="viewerBadge"], #GithubIcon, [class*="DeployDropdown"]');
-        cloudElements.forEach(el => {
-            el.style.setProperty('display', 'none', 'important');
-            el.remove(); // 아예 DOM 구조에서 제거
-        });
-    });
-    
-    // 페이지 로딩 완료 후 탐색 시작
-    observer.observe(parent.document.body, { childList: true, subtree: true });
-    observer.observe(document.body, { childList: true, subtree: true });
-    </script>
-    """,
-    unsafe_allow_html=True
-)
+
+
+
+
+
+
+
 # ###########################################################
 # streamlit 2. 전역변수 설정 
 # ###########################################################
