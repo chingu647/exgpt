@@ -1,6 +1,7 @@
 import streamlit as st
 
 from src.auth import get_current_api_key
+# 🔒 보안 및 수명주기(Lifecycle) 추적을 위해 필요한 함수를 온전하게 호출합니다.
 from src.gemini import get_gemini_client, upload_fixed_file_once, generate_content_with_retry
 from google.genai.errors import APIError
 
@@ -29,6 +30,11 @@ def show_chatbot():
         target_filename = st.session_state["FIXED_PDF_FILENAME"]
         google_file = upload_fixed_file_once(current_key, target_filename)
 
+        # 🔒 [보안 Lifecycle 반영] 구글 File API에 파일이 정상 업로드/조회되었다면,
+        # 해당 파일의 구글 내 유니크한 name 주소를 세션에 바인딩하여 Home.py에서 추적 및 파기할 수 있게 합니다.
+        if google_file:
+            st.session_state["LAST_UPLOADED_FILE_NAME"] = google_file.name
+
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
@@ -43,6 +49,7 @@ def show_chatbot():
         try:
             with st.chat_message("assistant"):
                 with st.spinner("답변을 생성 중입니다... (내용 정리 중)"):
+                    # 🔒 src/gemini.py에 내장된 '보안 시스템 명령(System Instruction)' 및 '온도 조절' 설정이 자동 적용됩니다.
                     response = generate_content_with_retry(
                         client=client,
                         model='gemini-3.1-flash-lite',
@@ -59,4 +66,5 @@ def show_chatbot():
                 st.error("⏳ 9개 프로젝트의 임시 요청 한도가 일시적으로 모두 소진되었습니다. 잠시 후 전송 버튼을 한 번 더 눌러 다른 키로 호출해 보세요.")
             else:
                 st.error(f"오류가 발생했습니다: {e}")
+                
 
