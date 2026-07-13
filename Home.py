@@ -13,16 +13,22 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # ###########################################################
 hide_streamlit_style = """
     <style>
-        /* 1) 우측 상단 깃허브 아이콘, Deploy 버튼, 헤더 전체 숨기기 */
-        #GithubIcon {visibility: hidden;}
-        .stDeployButton {display: none !important;}
-        .stAppDeployButton {display: none !important;}
-        header {visibility: hidden !important; height: 0px !important;}
+        /* 우측 상단 깃허브 아이콘, Deploy 버튼, 기본 메뉴 숨기기 */
+        #GithubIcon { visibility: hidden; }
+        .stDeployButton { display: none !important; }
+        .stAppDeployButton { display: none !important; }
+        #MainMenu { visibility: hidden !important; }
         
-        /* 2) 화면 가운데 아래 'Made with Streamlit' 및 기본 메뉴 숨기기 */
-        footer {visibility: hidden !important;}
-        #MainMenu {visibility: hidden !important;}
-        
+        /* 화면 우측 상단의 흐린 바(Header) 배경 투명화 및 메뉴 버튼만 숨김 */
+        header[data-testid="stHeader"] {
+            background-color: rgba(0,0,0,0) !important;
+        }
+        header[data-testid="stHeader"] [data-testid="stToolbar"] {
+            visibility: hidden !important;
+        }
+
+        /* 화면 가운데 아래 'Made with Streamlit' 푸터 숨기기 */
+        footer { visibility: hidden !important; }
     </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
