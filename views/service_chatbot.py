@@ -10,7 +10,7 @@ from google.genai.errors import APIError
 # ==========================================
 
 def show_chatbot():
-    st.subheader("💬 휴게소 업무 Chatbot")
+    st.subheader("💬 휴게시설 업무 Chatbot")
 #    st.markdown(":rocket: :green[**휴게시설 업무기준**] 및 :sparkles: :green[**자체투자사업 매뉴얼**] 안내")
     st.divider()
 
