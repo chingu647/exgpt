@@ -11,24 +11,32 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # ###########################################################
 # 2. UI 요소 숨기기 (Custom CSS) - 접힘메뉴 복원 버전
 # ###########################################################
-# 스트림릿 자체 푸터 + 클라우드 전용 툴바/호스팅 바 전체 제거 CSS
-hide_cloudflare_style = """
+# 스트림릿 최신 버전 우측 하단 Share/Manage 버튼 및 하단바 제거
+st.markdown(
+    """
     <style>
-    /* 1. 기본 스트림릿 메뉴 및 푸터 숨기기 */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
+    /* 1. 최신 스트림릿의 우측 하단 플로팅 관리/공유 뱃지 컨테이너 완전 삭제 */
+    div[data-testid="stStatusWidget"],
+    .viewerBadge_container__1QSob,
+    [class*="viewerBadge_container"] {
+        display: none !important;
+        visibility: hidden !important;
+    }
     
-    /* 2. 스트림릿 클라우드(공식 배포) 전용 하단 'Manage app' 및 호스팅 툴바 숨기기 */
-    div[data-testid="stStatusWidget"] {visibility: hidden;}
-    .viewerBadge_container__1QSob {display: none !important;}
-    div.embeddedAppMetaInfoBar_container__DxxL1 {display: none !important;}
+    /* 2. 하단에 생성되는 푸터 및 관리 바 영역 완전 삭제 */
+    footer {
+        display: none !important;
+        visibility: hidden !important;
+    }
     
-    /* 혹시 모를 앱 관리용 플로팅 버튼들 강제 제거 */
-    [data-testid="stDecoration"] {display: none;}
+    /* 3. 하단 여백 및 고정 엘리먼트 레이어 숨김 */
+    div[data-testid="stDecoration"] {
+        display: none !important;
+    }
     </style>
-"""
-st.markdown(hide_cloudflare_style, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 # ###########################################################
 # streamlit 2. 전역변수 설정 
 # ###########################################################
