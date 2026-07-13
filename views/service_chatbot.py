@@ -20,7 +20,7 @@ def show_chatbot():
     for msg in st.session_state.messages:
         st.chat_message(msg["role"]).write(msg["content"])
 
-    if prompt := st.chat_input("예) 휴게소 음식에 이물질 발견됨. 도공 처벌은? ... 질문 내용을 입력하세요 )"):
+    if prompt := st.chat_input("질문 내용을 입력하세요 ... \n 예) 휴게소 음식에 이물질 발견됨. 도공 처벌은? "):
         # ⚠️ [해결] 누락되었던 API Key 가져오기 코드 복구 (NameError 방지)
         current_key = get_current_api_key()
         client = get_gemini_client(current_key)
