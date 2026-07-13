@@ -9,7 +9,7 @@ from src.telegram import send_telegram_detail_alert, get_allowed_time_remaining
 # ----------------- 💻 4. UI 레이아웃 및 폼 제어 -----------------
 def show_support(): 
     c1, c2 = st.columns([3, 1], vertical_alignment="center", border=False)
-    c1.subheader("✔  입점업체 **SOS**")
+    c1.subheader("✔  입점업체 **sms**")
 
     # text_alignment 속성은 st.markdown에 없으므로 안전한 HTML 스타일로 대체 적용
     c2.markdown("<div style='text-align: right;'><a href='tel:063-714-6000'>☎ 063-714-6000</a></div>", unsafe_allow_html=True)
@@ -26,7 +26,7 @@ def show_support():
     with st.form(key=form_id, clear_on_submit=True):
         name = st.text_input("이름 또는 닉네임", placeholder="홍길동")
         email = st.text_input("답변받을 이메일 (선택)", placeholder="example@email.com")
-        content = st.text_area("도움이 필요한 내용", placeholder="👉 담당자에게 전달 즉시 **메시지는 삭제**됩니다. \n\n  ※ 다시쓰기는 60초 이후 가능합니다.^^")
+        content = st.text_area("도움이 필요한 내용", placeholder="예) 대금 미지급 등. \n\n  ※ 다시쓰기는 60초 이후 가능합니다.^^")
         
         submit_button = st.form_submit_button("❓ **Help 요청하기**")
 
