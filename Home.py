@@ -13,21 +13,21 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # ###########################################################
 hide_streamlit_style = """
     <style>
-        /* 우측 상단 깃허브 아이콘, Deploy 버튼, 기본 메뉴 숨기기 */
+        /* 우측 상단 깃허브 아이콘, Deploy 버튼, 메인 메뉴 점3개 버튼 숨기기 */
         #GithubIcon { visibility: hidden; }
         .stDeployButton { display: none !important; }
         .stAppDeployButton { display: none !important; }
         #MainMenu { visibility: hidden !important; }
         
-        /* 화면 우측 상단의 흐린 바(Header) 배경 투명화 및 메뉴 버튼만 숨김 */
+        /* [중요] header 자체를 없애지 말고, 우측의 툴바 내부 메뉴만 투명하게 숨김 */
         header[data-testid="stHeader"] {
-            background-color: rgba(0,0,0,0) !important;
+            background-color: rgba(0,0,0,0) !important; /* 헤더 배경만 투명화 */
         }
         header[data-testid="stHeader"] [data-testid="stToolbar"] {
-            visibility: hidden !important;
+            visibility: hidden !important; /* 우측 버튼들만 타겟팅 제거 */
         }
 
-        /* 화면 가운데 아래 'Made with Streamlit' 푸터 숨기기 */
+        /* 하단 푸터 숨기기 */
         footer { visibility: hidden !important; }
     </style>
 """
