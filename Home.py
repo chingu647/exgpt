@@ -11,11 +11,24 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # ###########################################################
 # 2. UI 요소 숨기기 (Custom CSS) - 접힘메뉴 복원 버전
 # ###########################################################
-hide_footer_style = """
-<style>
-.reportview-container .main footer {visibility: hidden;}    
+# 스트림릿 자체 푸터 + 클라우드 전용 툴바/호스팅 바 전체 제거 CSS
+hide_cloudflare_style = """
+    <style>
+    /* 1. 기본 스트림릿 메뉴 및 푸터 숨기기 */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* 2. 스트림릿 클라우드(공식 배포) 전용 하단 'Manage app' 및 호스팅 툴바 숨기기 */
+    div[data-testid="stStatusWidget"] {visibility: hidden;}
+    .viewerBadge_container__1QSob {display: none !important;}
+    div.embeddedAppMetaInfoBar_container__DxxL1 {display: none !important;}
+    
+    /* 혹시 모를 앱 관리용 플로팅 버튼들 강제 제거 */
+    [data-testid="stDecoration"] {display: none;}
+    </style>
 """
-st.markdown(hide_footer_style, unsafe_allow_html=True)
+st.markdown(hide_cloudflare_style, unsafe_allow_html=True)
 # ###########################################################
 # streamlit 2. 전역변수 설정 
 # ###########################################################
