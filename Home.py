@@ -9,22 +9,25 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # ###########################################################
-# 2. UI 요소 숨기기 (Custom CSS)
+# 2. UI 요소 숨기기 (Custom CSS) - 접힘메뉴 복원 버전
 # ###########################################################
 st.markdown(
     """
     <style>
-    /* 우측 상단 메인 메뉴 버튼 및 Fork/Deploy 아이콘 숨기기 */
-    #MainMenu, .stAppDeployButton, [data-testid="stStatusWidget"] {
+    /* 1. 우측 상단 툴바 전체(삼선 메뉴, 배포 버튼, 상태 표시 등)를 완전히 증발시킵니다. */
+    [data-testid="stToolbar"] {
         display: none !important;
     }
-    /* 하단 워터마크 숨기기 (필요 시) */
+    
+    /* 2. 하단 워터마크 숨기기 */
     footer {
         visibility: hidden !important;
     }
-    /* 우측 상단에 남는 헤더 여백 최소화 */
-    header {
-        visibility: hidden !important;
+    
+    /* 3. 헤더 전체를 숨기지 않고, 배경만 투명화하여 좌측 접힘 메뉴 버튼 위치를 확보합니다. */
+    header[data-testid="stHeader"] {
+        background-color: transparent !important;
+        background: transparent !important;
     }
     </style>
     """,
