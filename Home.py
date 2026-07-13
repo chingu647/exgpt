@@ -14,28 +14,39 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 st.markdown(
     """
     <style>
-    /* 1. 우측 상단 툴바 및 배포 관련 모든 버튼(Fork 버튼 포함) 차단 */
+    /* 1. 우측 상단 툴바 및 배포 관련 모든 요소 차단 */
     [data-testid="stActionButton"],
     [data-testid="stMainMenu"],
     [data-testid="stAppDeployDropdown"],
-    header button:has(svg path[d*="M18"]), /* Fork 아이콘 모양 정밀 조준 차단 */
-    .stAppDeployDropdown {
+    .stAppDeployDropdown,
+    header iframe { /* 깃허브 아이콘 관련 프레임 차단 */
         display: none !important;
         visibility: hidden !important;
     }
     
-    /* 2. 하단 워터마크 숨기기 */
+    /* 2. 깃허브 고양이 아이콘(#GithubIcon) 정밀 저격 */
+    #GithubIcon, 
+    #GithubIcon *,
+    a[href*="github.com"] { /* 깃허브 링크 주소로 연결된 버튼 차단 */
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+    
+    /* 3. 하단 워터마크 숨기기 */
     footer {
         visibility: hidden !important;
     }
     
-    /* 3. 헤더 투명화 */
+    /* 4. 헤더 투명화 */
     header[data-testid="stHeader"] {
         background-color: transparent !important;
         background: transparent !important;
     }
 
-    /* 4. [핵심] 오직 '사이드바 열기/닫기' 버튼만 콕 집어서 강제 노출 */
+    /* 5. [핵심] 오직 '사이드바 열기/닫기' 버튼만 콕 집어서 고정 노출 */
     div[data-testid="stSidebarCollapseButton"],
     div[data-testid="stSidebarCollapseButton"] *,
     button[aria-label="Close sidebar"],
