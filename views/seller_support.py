@@ -12,7 +12,7 @@ def show_support():
     c1.subheader("✔  입점업체 **sms**")
 
     # text_alignment 속성은 st.markdown에 없으므로 안전한 HTML 스타일로 대체 적용
-    c2.markdown("<div style='text-align: right;'><a href='tel:063-714-6000'>☎ 063-714-6000</a></div>", unsafe_allow_html=True)
+    c2.markdown("<div style='text-align: right;'><a href='tel:063-714-6000'>☎ 063-714-6076</a></div>", unsafe_allow_html=True)
     st.markdown("(대금 미지급 등) :red[**현장**]의 :red[**애로 사항**]을 알려 주세요.")
 
     # 실시간 제한 시간 안내 바
