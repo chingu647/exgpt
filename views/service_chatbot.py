@@ -31,7 +31,7 @@ def show_chatbot():
         st.chat_message(msg["role"]).write(msg["content"])
 
     # 🔒 [보안 통제] 입력창 내부에도 직관적인 예시 힌트 제공
-    chat_placeholder = "질문을 입력하세요 (예: OO휴게소 업체A 대금 미지급 처분 기준은?)"
+    chat_placeholder = "질문을 입력하세요 \n\n (예: OO휴게소 업체A 대금 미지급 처분 기준은?)"
 
     if prompt := st.chat_input(chat_placeholder):
         # ⚠️ API Key 가져오기 및 클라이언트 빌드
