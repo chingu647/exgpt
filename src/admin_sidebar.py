@@ -5,8 +5,8 @@ def render_admin_sidebar():
     """상시 유지되는 관리자 전용 사이드바 UI 렌더링"""
     with st.sidebar:
         st.header("⚙️ 관리자 전용 메뉴")
-        if st.button("🗑️ 파일 인식 및 정리"):
-            with st.spinner("9개 프로젝트 전체 청소 중..."):
+        if st.button("🗑️ 파일 청소 및 정리"):
+            with st.spinner("프로젝트 청소 중..."):
                 try:
                     count = clean_all_projects()
                     st.cache_resource.clear() 
