@@ -17,7 +17,7 @@ def show_support():
     # 실시간 제한 시간 안내 바 
     remaining = get_allowed_time_remaining() 
     if remaining > 0: 
-        st.warning(f"🔒 도배 방지를 위해 잠시 발송이 제한됩니다. (남은 시간: {remaining}초)") 
+        st.warning(f"🔒 다시 쓰기는 60초 후에 가능합니다. (남은 시간: {remaining}초)") 
 
     # [개선] clear_on_submit을 False로 설정하여, 검증 실패 시 입력 내용이 지워지지 않도록 차단합니다.
     # [개선] 폼 ID가 분(Minute)마다 바뀌면 값이 유실될 수 있으므로 고정된 고유 키를 사용합니다.
@@ -52,7 +52,7 @@ def show_support():
                 
                 if success: 
                     st.success("요청이 정상적으로 접수되었습니다! 개발자 알림 발송 완료.") 
-                    time.sleep(2) 
+                    time.sleep(3) 
                     # [개선] 전송이 완벽히 성공한 시점에만 rerun()을 호출하여 입력 폼을 깨끗하게 초기화합니다.
                     st.rerun() 
                 else:
