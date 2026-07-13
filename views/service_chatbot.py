@@ -42,7 +42,7 @@ def show_chatbot():
 
         try:
             with st.chat_message("assistant"):
-                with st.spinner("답변을 생성 중입니다... (잠시 생각 중)"):
+                with st.spinner("답변을 생성 중입니다... (내용 정리 중)"):
                     response = generate_content_with_retry(
                         client=client,
                         model='gemini-2.5-flash-lite',
