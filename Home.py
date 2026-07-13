@@ -11,27 +11,24 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # ###########################################################
 # 2. UI 요소 숨기기 (Custom CSS)
 # ###########################################################
-hide_streamlit_style = """
+st.markdown(
+    """
     <style>
-        /* 우측 상단 깃허브 아이콘, Deploy 버튼, 메인 메뉴 점3개 버튼 숨기기 */
-        #GithubIcon { visibility: hidden; }
-        .stDeployButton { display: none !important; }
-        .stAppDeployButton { display: none !important; }
-        #MainMenu { visibility: hidden !important; }
-        
-        /* [중요] header 자체를 없애지 말고, 우측의 툴바 내부 메뉴만 투명하게 숨김 */
-        header[data-testid="stHeader"] {
-            background-color: rgba(0,0,0,0) !important; /* 헤더 배경만 투명화 */
-        }
-        header[data-testid="stHeader"] [data-testid="stToolbar"] {
-            visibility: hidden !important; /* 우측 버튼들만 타겟팅 제거 */
-        }
-
-        /* 하단 푸터 숨기기 */
-        footer { visibility: hidden !important; }
+    /* 우측 상단 메인 메뉴 버튼 및 Fork/Deploy 아이콘 숨기기 */
+    #MainMenu, .stAppDeployButton, [data-testid="stStatusWidget"] {
+        display: none !important;
+    }
+    /* 하단 워터마크 숨기기 (필요 시) */
+    footer {
+        visibility: hidden !important;
+    }
+    /* 우측 상단에 남는 헤더 여백 최소화 */
+    header {
+        visibility: hidden !important;
+    }
     </style>
-"""
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
 # ###########################################################
 # streamlit 2. 전역변수 설정 
 # ###########################################################
