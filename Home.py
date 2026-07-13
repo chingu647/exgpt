@@ -12,10 +12,10 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # 2. UI 요소 숨기기 (Custom CSS) - 접힘메뉴 복원 버전
 # ###########################################################
 hide_footer_style = """
-    <style>
-    .reportview-container .main footer {visibility: hidden;}    
-    """
-    st.markdown(hide_footer_style, unsafe_allow_html=True)
+<style>
+.reportview-container .main footer {visibility: hidden;}    
+"""
+st.markdown(hide_footer_style, unsafe_allow_html=True)
 # ###########################################################
 # streamlit 2. 전역변수 설정 
 # ###########################################################
