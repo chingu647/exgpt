@@ -14,8 +14,9 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 st.markdown(
     """
     <style>
-    /* 1. 우측 상단 툴바 전체(삼선 메뉴, 배포 버튼, 상태 표시 등)를 숨깁니다. */
-    [data-testid="stToolbar"] {
+    /* 1. 우측 툴바 요소만 완벽 차단 */
+    [data-testid="stActionButton"],
+    [data-testid="stMainMenu"] {
         display: none !important;
     }
     
@@ -24,18 +25,21 @@ st.markdown(
         visibility: hidden !important;
     }
     
-    /* 3. 헤더 배경 투명화 및 높이 유지 */
+    /* 3. 헤더 투명화 및 클릭 레이어 확보 */
     header[data-testid="stHeader"] {
         background-color: transparent !important;
         background: transparent !important;
     }
 
-    /* 4. [핵심] 좌측 사이드바 접힘/펼침 버튼만 콕 집어서 '무조건' 화면에 표시 */
-    [data-testid="stSidebarCollapseButton"], 
-    [data-testid="stSidebarCollapseButton"] button,
-    header button {
+    /* 4. [핵심] 사이드바 버튼 및 하위 모든 요소 완전 강제 노출 */
+    div[data-testid="stSidebarCollapseButton"],
+    div[data-testid="stSidebarCollapseButton"] *,
+    button[aria-label="Close sidebar"],
+    button[aria-label="Open sidebar"] {
         visibility: visible !important;
         display: inline-flex !important;
+        opacity: 1 !important;
+        transition: none !important; /* 사라지는 애니메이션 차단 */
     }
     </style>
     """,
