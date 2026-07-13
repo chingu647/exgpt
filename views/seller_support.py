@@ -1,5 +1,7 @@
 import streamlit as st 
 import time 
+# datetime 모듈에서 datetime 클래스와 timedelta 클래스를 각각 정확히 가져옵니다.
+from datetime import datetime, timedelta 
 from src.telegram import send_telegram_detail_alert, get_allowed_time_remaining 
 
 # ========================================== # 
