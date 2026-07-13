@@ -14,53 +14,40 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 st.markdown(
     """
     <style>
-    /* 1. 우측 상단 툴바 및 배포 관련 모든 요소 차단 */
+    /* CSS 기본 정리 */
     [data-testid="stActionButton"],
     [data-testid="stMainMenu"],
-    [data-testid="stAppDeployDropdown"],
-    .stAppDeployDropdown,
-    header iframe { /* 깃허브 아이콘 관련 프레임 차단 */
-        display: none !important;
-        visibility: hidden !important;
-    }
-    
-    /* 2. 깃허브 고양이 아이콘(#GithubIcon) 정밀 저격 */
-    #GithubIcon, 
-    #GithubIcon *,
-    a[href*="github.com"] { /* 깃허브 링크 주소로 연결된 버튼 차단 */
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        width: 0 !important;
-        height: 0 !important;
-    }
-    
-    /* 3. 하단 워터마크 숨기기 */
     footer {
-        visibility: hidden !important;
+        display: none !important;
     }
-    
-    /* 4. 헤더 투명화 */
     header[data-testid="stHeader"] {
-        background-color: transparent !important;
         background: transparent !important;
     }
-
-    /* 5. [핵심] 오직 '사이드바 열기/닫기' 버튼만 콕 집어서 고정 노출 */
     div[data-testid="stSidebarCollapseButton"],
-    div[data-testid="stSidebarCollapseButton"] *,
-    button[aria-label="Close sidebar"],
-    button[aria-label="Open sidebar"],
-    button[aria-label="Close sidebar"] *,
-    button[aria-label="Open sidebar"] * {
+    div[data-testid="stSidebarCollapseButton"] * {
         visibility: visible !important;
         display: inline-flex !important;
         opacity: 1 !important;
-        transition: none !important;
     }
     </style>
+    
+    <script>
+    // 깃허브 고양이 및 툴바 프레임을 감시하여 생성 즉시 파괴하는 스크립트
+    const observer = new MutationObserver((mutations) => {
+        // Streamlit 호스트 레이어의 깃허브 배지 및 상단 헤더 툴바 추적
+        const cloudElements = parent.document.querySelectorAll('.stViewerBadge, [class*="viewerBadge"], #GithubIcon, [class*="DeployDropdown"]');
+        cloudElements.forEach(el => {
+            el.style.setProperty('display', 'none', 'important');
+            el.remove(); // 아예 DOM 구조에서 제거
+        });
+    });
+    
+    // 페이지 로딩 완료 후 탐색 시작
+    observer.observe(parent.document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, subtree: true });
+    </script>
     """,
-    unsafe_allow_html=True 
+    unsafe_allow_html=True
 )
 # ###########################################################
 # streamlit 2. 전역변수 설정 
