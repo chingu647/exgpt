@@ -64,10 +64,6 @@ if current == "휴게소 챗봇":
     from views import service_chatbot as sec
     sec.show_chatbot() 
 
-elif current == "휴게소 성과":
-    from views import service_overview as seo
-    seo.show_overview() 
-
 elif current == "입점업체 지원":
     from views import seller_support as ses
     ses.show_support() 
