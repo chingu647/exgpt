@@ -14,7 +14,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 st.markdown(
     """
     <style>
-    /* 1. 우측 상단 툴바 전체(삼선 메뉴, 배포 버튼, 상태 표시 등)를 완전히 증발시킵니다. */
+    /* 1. 우측 상단 툴바 전체(삼선 메뉴, 배포 버튼, 상태 표시 등)를 숨깁니다. */
     [data-testid="stToolbar"] {
         display: none !important;
     }
@@ -24,10 +24,18 @@ st.markdown(
         visibility: hidden !important;
     }
     
-    /* 3. 헤더 전체를 숨기지 않고, 배경만 투명화하여 좌측 접힘 메뉴 버튼 위치를 확보합니다. */
+    /* 3. 헤더 배경 투명화 및 높이 유지 */
     header[data-testid="stHeader"] {
         background-color: transparent !important;
         background: transparent !important;
+    }
+
+    /* 4. [핵심] 좌측 사이드바 접힘/펼침 버튼만 콕 집어서 '무조건' 화면에 표시 */
+    [data-testid="stSidebarCollapseButton"], 
+    [data-testid="stSidebarCollapseButton"] button,
+    header button {
+        visibility: visible !important;
+        display: inline-flex !important;
     }
     </style>
     """,
